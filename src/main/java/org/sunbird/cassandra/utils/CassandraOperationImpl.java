@@ -67,10 +67,9 @@ public class CassandraOperationImpl implements CassandraOperation {
             }
             connectionManager.getSession(keyspaceName).execute(batchStatement);
             response.put(Constants.RESPONSE, Constants.SUCCESS);
-        } catch (Exception e) {
-            logger.error(String.format("Exception occurred while inserting bulk record to %s %s", tableName,
-                    e.getMessage()));
-        }
+		} catch (Exception e) {
+			logger.error(String.format("Exception occurred while inserting bulk record to %s.", tableName), e);
+		}
         return response;
     }
 

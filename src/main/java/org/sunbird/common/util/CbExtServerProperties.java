@@ -314,6 +314,9 @@ public class CbExtServerProperties {
 	
 	@Value("${user.registration.welcome.email.subject}")
 	private String welcomeEmailSubject;
+	
+	@Value("${user.passbook.supported.typename}")
+	private String userPassbookSupportedTypeName;
 
 	public String getUserAssessmentSubmissionDuration() {
 		return userAssessmentSubmissionDuration;
@@ -1148,5 +1151,13 @@ public class CbExtServerProperties {
 
 	public void setWelcomeEmailSubject(String welcomeEmailSubject) {
 		this.welcomeEmailSubject = welcomeEmailSubject;
+	}
+
+	public List<String> getUserPassbookSupportedTypeName() {
+		return Arrays.asList(userPassbookSupportedTypeName.split(",", -1));
+	}
+
+	public void setUserPassbookSupportedTypeName(String userPassbookSupportedTypeName) {
+		this.userPassbookSupportedTypeName = userPassbookSupportedTypeName;
 	}
 }
