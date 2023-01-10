@@ -465,7 +465,7 @@ public class Constants {
 	public static final String PASSBOOK_READ_API = "user.passbook.read";
 	public static final String PASSBOOK_ADMIN_READ_API = "user.passbook.admin.read";
 	public static final String PASSBOOK_ADD_API = "user.passbook.add";
-	public static final String USER_PASSBOOK_TABLE = "user_passbook";
+	public static final String USER_PASSBOOK_TABLE = "user_passbook_v2";
 	public static final String TYPE_NAME = "typeName";
 	public static final String TYPE_ID = "typeId";
 	public static final String ADDITIONAL_PARAM = "additionalParams";
