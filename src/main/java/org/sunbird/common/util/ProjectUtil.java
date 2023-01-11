@@ -1,12 +1,10 @@
 package org.sunbird.common.util;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -20,6 +18,8 @@ import org.sunbird.common.model.SunbirdApiRespParam;
 
 import com.datastax.driver.core.utils.UUIDs;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static java.lang.Long.parseLong;
 
 /**
  * This class will contains all the common utility methods.
@@ -109,5 +109,30 @@ public class ProjectUtil {
 			logger.error("Failed to convert String to UUID time. Exception :", e);
 		}
 		return null;
+	}
+	public static long getEpochTime(String time){
+		SimpleDateFormat df = new SimpleDateFormat("MMM dd yyyy HH:mm:ss.SSS zzz");
+		Date date = null;
+		try {
+			date = df.parse(time);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+		long epoch = date.getTime();
+		return epoch;
+	}
+
+	public static String getInstantTime(){
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		Date date = new Date();
+		return formatter.format(date);
+	}
+
+	public static String getTimestampFromEpoch(String epochDate){
+		Date date = new Date(parseLong(epochDate) * 1000L);
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+		String formatted = format.format(date);
+		return formatted;
 	}
 }

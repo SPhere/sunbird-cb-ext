@@ -30,10 +30,9 @@ public class PassbookController {
 		SBApiResponse response = passbookService.updatePassbook(requestedUserId, request);
 		return new ResponseEntity<>(response, response.getResponseCode());
 	}
-	@PatchMapping("/user/v2/passbook")
-	public ResponseEntity<SBApiResponse> updatePassbookv2(@RequestHeader(Constants.X_AUTH_USER_ID) String requestedUserId,
-														@RequestBody Map<String, Object> request) {
-		SBApiResponse response = passbookService.updatePassbook(requestedUserId, request);
+	@PatchMapping("/user/v1/migrateData")
+	public ResponseEntity<SBApiResponse> migrateData() {
+		SBApiResponse response = passbookService.migrateData();
 		return new ResponseEntity<>(response, response.getResponseCode());
 	}
 	@PostMapping("/user/v1/passbook")

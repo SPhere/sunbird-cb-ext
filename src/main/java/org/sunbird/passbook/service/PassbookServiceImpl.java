@@ -209,4 +209,9 @@ public class PassbookServiceImpl implements PassbookService {
 	private PassbookParser getPassbookParser(String typeName) {
 		return parserHanlder.getPassbookParser(typeName);
 	}
+
+	public SBApiResponse migrateData(){
+		SBApiResponse response = null;
+		return response;
+	}
 }

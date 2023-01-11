@@ -66,7 +66,7 @@ public class CompetencyPassbookParser implements PassbookParser {
 			acquiredDetail.put(Constants.ACQUIRED_CHANNEL, (String) competencyObj.get(Constants.ACQUIRED_CHANNEL));
 			acquiredDetail.put(Constants.COMPETENCY_LEVEL_ID, (String) competencyObj.get(Constants.CONTEXT_ID));
 			acquiredDetail.put(Constants.EFFECTIVE_DATE,
-					ProjectUtil.getTimestampFromUUID((UUID) competencyObj.get(Constants.EFFECTIVE_DATE)));
+					ProjectUtil.getTimestampFromEpoch((Constants.EFFECTIVE_DATE)));
 			acquiredDetail.put(Constants.ADDITIONAL_PARAM,
 					(Map<String, Object>) competencyObj.get(Constants.ACQUIRED_DETAILS));
 			Map<String, Object> acquiredDetailAdditionalParam = (Map<String, Object>) competencyObj
@@ -209,15 +209,16 @@ public class CompetencyPassbookParser implements PassbookParser {
 			}
 
 			String effectiveDate = (String) acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
+
 			if (StringUtils.isBlank(effectiveDate)) {
-				competency.put(Constants.EFFECTIVE_DATE, UUIDs.timeBased());
+				competency.put(Constants.EFFECTIVE_DATE, ProjectUtil.getInstantTime());
 				// missingAttributes.add(Constants.EFFECTIVE_DATE);
 			} else {
-				UUID effectiveDateUUID = ProjectUtil.getUUIDFromTimeStamp(effectiveDate);
-				if (effectiveDateUUID == null) {
+				String effectiveDate1 = String.valueOf(ProjectUtil.getEpochTime(effectiveDate));
+				if (effectiveDate1 == null) {
 					errList.add("Invalid effectiveDate format.");
 				} else {
-					competency.put(Constants.EFFECTIVE_DATE, ProjectUtil.getUUIDFromTimeStamp(effectiveDate));
+					competency.put(Constants.EFFECTIVE_DATE, effectiveDate1);
 				}
 			}
 		}
