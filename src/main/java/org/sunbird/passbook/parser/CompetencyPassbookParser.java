@@ -1,12 +1,8 @@
 package org.sunbird.passbook.parser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.UUID;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -208,13 +204,13 @@ public class CompetencyPassbookParser implements PassbookParser {
 				competency.put(Constants.CONTEXT_ID, competencyLevelId);
 			}
 
-			String effectiveDate = (String) acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
+			Date effectiveDate = (Date)acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
 
-			if (StringUtils.isBlank(effectiveDate)) {
-				competency.put(Constants.EFFECTIVE_DATE, ProjectUtil.getInstantTime());
+			if (StringUtils.isBlank(String.valueOf(effectiveDate))) {
+				competency.put(Constants.EFFECTIVE_DATE, new Timestamp(System.currentTimeMillis()));
 				// missingAttributes.add(Constants.EFFECTIVE_DATE);
 			} else {
-				String effectiveDate1 = String.valueOf(ProjectUtil.getEpochTime(effectiveDate));
+				Timestamp effectiveDate1 = new Timestamp(effectiveDate.getTime());
 				if (effectiveDate1 == null) {
 					errList.add("Invalid effectiveDate format.");
 				} else {

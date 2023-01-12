@@ -210,8 +210,9 @@ public class PassbookServiceImpl implements PassbookService {
 		return parserHanlder.getPassbookParser(typeName);
 	}
 
-	public SBApiResponse migrateData(){
-		SBApiResponse response = null;
-		return response;
+	public void migrateData(){
+		List<Map<String, Object>> passbookList = cassandraOperation.getRecordsByProperties(Constants.DATABASE,
+				Constants.USER_PASSBOOK_TABLE_OLD, null, null);
+		cassandraOperation.insertBulkRecord(Constants.DATABASE,Constants.USER_PASSBOOK_TABLE,passbookList);
 	}
 }

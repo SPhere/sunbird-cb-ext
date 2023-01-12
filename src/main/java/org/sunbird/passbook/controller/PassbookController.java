@@ -31,9 +31,8 @@ public class PassbookController {
 		return new ResponseEntity<>(response, response.getResponseCode());
 	}
 	@PatchMapping("/user/v1/migrateData")
-	public ResponseEntity<SBApiResponse> migrateData() {
-		SBApiResponse response = passbookService.migrateData();
-		return new ResponseEntity<>(response, response.getResponseCode());
+	public void migrateData() {
+		passbookService.migrateData();
 	}
 	@PostMapping("/user/v1/passbook")
 	public ResponseEntity<SBApiResponse> getUserPassbook(

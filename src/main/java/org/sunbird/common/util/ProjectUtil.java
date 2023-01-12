@@ -122,10 +122,10 @@ public class ProjectUtil {
 		return epoch;
 	}
 
-	public static String getInstantTime(){
+	public static Timestamp getInstantTime(){
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		Date date = new Date();
-		return formatter.format(date);
+		return Timestamp.valueOf(formatter.format(date));
 	}
 
 	public static String getTimestampFromEpoch(String epochDate){
