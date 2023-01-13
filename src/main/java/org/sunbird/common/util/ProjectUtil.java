@@ -122,7 +122,7 @@ public class ProjectUtil {
 		return epoch;
 	}
 
-	public static Timestamp getInstantTime(){
+	/*public static Timestamp getInstantTime(){
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		Date date = new Date();
 		return Timestamp.valueOf(formatter.format(date));
@@ -134,5 +134,5 @@ public class ProjectUtil {
 		format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
 		String formatted = format.format(date);
 		return formatted;
-	}
+	}*/
 }

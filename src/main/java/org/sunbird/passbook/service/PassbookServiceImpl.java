@@ -19,6 +19,7 @@ import org.sunbird.common.model.SBApiResponse;
 import org.sunbird.common.util.CbExtServerProperties;
 import org.sunbird.common.util.Constants;
 import org.sunbird.common.util.ProjectUtil;
+import org.sunbird.passbook.parser.CompetencyPassbookParser;
 import org.sunbird.passbook.parser.PassbookParser;
 import org.sunbird.passbook.parser.PassbookParserHandler;
 
@@ -35,6 +36,9 @@ public class PassbookServiceImpl implements PassbookService {
 
 	@Autowired
 	PassbookParserHandler parserHanlder;
+
+	@Autowired
+	PassbookParser parser;
 
 	@Override
 	public SBApiResponse getPassbook(String requestedUserId, Map<String, Object> request) {
@@ -213,6 +217,8 @@ public class PassbookServiceImpl implements PassbookService {
 	public void migrateData(){
 		List<Map<String, Object>> passbookList = cassandraOperation.getRecordsByProperties(Constants.DATABASE,
 				Constants.USER_PASSBOOK_TABLE_OLD, null, null);
+		SBApiResponse response = ProjectUtil.createDefaultResponse(Constants.PASSBOOK_READ_API);
+		parser.parseDBInfoOld(passbookList,response);
 		cassandraOperation.insertBulkRecord(Constants.DATABASE,Constants.USER_PASSBOOK_TABLE,passbookList);
 	}
 }

@@ -61,8 +61,7 @@ public class CompetencyPassbookParser implements PassbookParser {
 			Map<String, Object> acquiredDetail = new HashMap<String, Object>();
 			acquiredDetail.put(Constants.ACQUIRED_CHANNEL, (String) competencyObj.get(Constants.ACQUIRED_CHANNEL));
 			acquiredDetail.put(Constants.COMPETENCY_LEVEL_ID, (String) competencyObj.get(Constants.CONTEXT_ID));
-			acquiredDetail.put(Constants.EFFECTIVE_DATE,
-					ProjectUtil.getTimestampFromEpoch((Constants.EFFECTIVE_DATE)));
+			acquiredDetail.put(Constants.EFFECTIVE_DATE, (Timestamp)competencyObj.get(Constants.EFFECTIVE_DATE));
 			acquiredDetail.put(Constants.ADDITIONAL_PARAM,
 					(Map<String, Object>) competencyObj.get(Constants.ACQUIRED_DETAILS));
 			Map<String, Object> acquiredDetailAdditionalParam = (Map<String, Object>) competencyObj
@@ -204,7 +203,7 @@ public class CompetencyPassbookParser implements PassbookParser {
 				competency.put(Constants.CONTEXT_ID, competencyLevelId);
 			}
 
-			Date effectiveDate = (Date)acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
+			Timestamp effectiveDate = (Timestamp) acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
 
 			if (StringUtils.isBlank(String.valueOf(effectiveDate))) {
 				competency.put(Constants.EFFECTIVE_DATE, new Timestamp(System.currentTimeMillis()));
@@ -239,4 +238,58 @@ public class CompetencyPassbookParser implements PassbookParser {
 
 		return errMsg.toString();
 	}
+	public void parseDBInfoOld(List<Map<String, Object>> passbookList, SBApiResponse response) {
+		if (CollectionUtils.isEmpty(passbookList)) {
+			response.getResult().put(Constants.COUNT, 0);
+			response.getResult().put(Constants.CONTENT, CollectionUtils.EMPTY_COLLECTION);
+			return;
+		}
+
+		Map<String, CompetencyPassbookInfo> competencyMap = new HashMap<String, CompetencyPassbookInfo>();
+		// Parse the read values from DB and add it into response.result object
+		for (Map<String, Object> competencyObj : passbookList) {
+			String userId = (String) competencyObj.get(Constants.USER_ID);
+			CompetencyPassbookInfo competencyPassbookInfo = null;
+			if (competencyMap.containsKey(userId)) {
+				competencyPassbookInfo = competencyMap.get(userId);
+			} else {
+				competencyPassbookInfo = new CompetencyPassbookInfo(userId);
+				competencyMap.put(userId, competencyPassbookInfo);
+			}
+			String competencyId = (String) competencyObj.get(Constants.TYPE_ID);
+			CompetencyInfo competencyInfo = competencyPassbookInfo.getCompetencies().get(competencyId);
+			if (competencyInfo == null) {
+				competencyInfo = new CompetencyInfo(competencyId);
+			}
+
+			if (ObjectUtils.isEmpty(competencyInfo.getAdditionalParams())) {
+				competencyInfo.setAdditionalParams((Map<String, String>) competencyObj.get(Constants.ADDITIONAL_PARAM));
+			}
+			Map<String, Object> acquiredDetail = new HashMap<String, Object>();
+			acquiredDetail.put(Constants.ACQUIRED_CHANNEL, (String) competencyObj.get(Constants.ACQUIRED_CHANNEL));
+			acquiredDetail.put(Constants.COMPETENCY_LEVEL_ID, (String) competencyObj.get(Constants.CONTEXT_ID));
+			acquiredDetail.put(Constants.EFFECTIVE_DATE,
+					ProjectUtil.getTimestampFromUUID((UUID) competencyObj.get(Constants.EFFECTIVE_DATE)));
+			acquiredDetail.put(Constants.ADDITIONAL_PARAM,
+					(Map<String, Object>) competencyObj.get(Constants.ACQUIRED_DETAILS));
+			Map<String, Object> acquiredDetailAdditionalParam = (Map<String, Object>) competencyObj
+					.get(Constants.ACQUIRED_DETAILS);
+
+			Iterator<Entry<String, Object>> iterator = acquiredDetailAdditionalParam.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Entry<String, Object> entry = iterator.next();
+				if (entry.getValue() instanceof String) {
+					acquiredDetail.put(entry.getKey(), (String) entry.getValue());
+				} else {
+					// TODO - We need JSON schema config to determine the type of value.
+				}
+			}
+
+			competencyInfo.getAcquiredDetails().add(acquiredDetail);
+			competencyPassbookInfo.getCompetencies().put(competencyId, competencyInfo);
+		}
+		response.getResult().put(Constants.COUNT, competencyMap.size());
+		response.getResult().put(Constants.CONTENT, competencyMap.values());
+	}
+
 }
