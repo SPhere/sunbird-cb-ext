@@ -30,7 +30,7 @@ public class PassbookController {
 		SBApiResponse response = passbookService.updatePassbook(requestedUserId, request);
 		return new ResponseEntity<>(response, response.getResponseCode());
 	}
-	@PatchMapping("/user/v1/migrateData")
+	@PostMapping("/user/v1/migrateData")
 	public void migrateData() {
 		passbookService.migrateData();
 	}

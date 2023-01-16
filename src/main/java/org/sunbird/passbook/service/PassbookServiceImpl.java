@@ -1,10 +1,7 @@
 package org.sunbird.passbook.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.util.*;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -217,8 +214,12 @@ public class PassbookServiceImpl implements PassbookService {
 	public void migrateData(){
 		List<Map<String, Object>> passbookList = cassandraOperation.getRecordsByProperties(Constants.DATABASE,
 				Constants.USER_PASSBOOK_TABLE_OLD, null, null);
+		passbookList.forEach(item -> item.forEach((k, v) -> System.out.println(k + ": " + v)));
 		SBApiResponse response = ProjectUtil.createDefaultResponse(Constants.PASSBOOK_READ_API);
-		parser.parseDBInfoOld(passbookList,response);
-		cassandraOperation.insertBulkRecord(Constants.DATABASE,Constants.USER_PASSBOOK_TABLE,passbookList);
+		for (Map<String, Object> requestMap : passbookList){
+			Timestamp time = ProjectUtil.getTimestampFromUUID((UUID) requestMap.get(Constants.EFFECTIVE_DATE));
+ 			requestMap.put(Constants.EFFECTIVE_DATE,time);
+			cassandraOperation.insertRecord(Constants.KEYSPACE_SUNBIRD,Constants.USER_PASSBOOK_TABLE,requestMap);
+		}
 	}
 }
