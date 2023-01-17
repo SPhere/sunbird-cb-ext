@@ -110,29 +110,4 @@ public class ProjectUtil {
 		}
 		return null;
 	}
-	public static long getEpochTime(String time){
-		SimpleDateFormat df = new SimpleDateFormat("MMM dd yyyy HH:mm:ss.SSS zzz");
-		Date date = null;
-		try {
-			date = df.parse(time);
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
-		long epoch = date.getTime();
-		return epoch;
-	}
-
-	/*public static Timestamp getInstantTime(){
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		Date date = new Date();
-		return Timestamp.valueOf(formatter.format(date));
-	}
-
-	public static String getTimestampFromEpoch(String epochDate){
-		Date date = new Date(parseLong(epochDate) * 1000L);
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		format.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
-		String formatted = format.format(date);
-		return formatted;
-	}*/
 }

@@ -1,6 +1,7 @@
 package org.sunbird.passbook.parser;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -60,7 +61,7 @@ public class CompetencyPassbookParser implements PassbookParser {
 			Map<String, Object> acquiredDetail = new HashMap<String, Object>();
 			acquiredDetail.put(Constants.ACQUIRED_CHANNEL, (String) competencyObj.get(Constants.ACQUIRED_CHANNEL));
 			acquiredDetail.put(Constants.COMPETENCY_LEVEL_ID, (String) competencyObj.get(Constants.CONTEXT_ID));
-			acquiredDetail.put(Constants.EFFECTIVE_DATE, (Timestamp)competencyObj.get(Constants.EFFECTIVE_DATE));
+			acquiredDetail.put(Constants.EFFECTIVE_DATE, competencyObj.get(Constants.EFFECTIVE_DATE));
 			acquiredDetail.put(Constants.ADDITIONAL_PARAM,
 					(Map<String, Object>) competencyObj.get(Constants.ACQUIRED_DETAILS));
 			Map<String, Object> acquiredDetailAdditionalParam = (Map<String, Object>) competencyObj
@@ -201,14 +202,12 @@ public class CompetencyPassbookParser implements PassbookParser {
 			} else {
 				competency.put(Constants.CONTEXT_ID, competencyLevelId);
 			}
-
-			Timestamp effectiveDate = (Timestamp) acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
-
+			String effectiveDate = (String) acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
 			if (StringUtils.isBlank(String.valueOf(effectiveDate))) {
-				competency.put(Constants.EFFECTIVE_DATE, new Timestamp(System.currentTimeMillis()));
+				competency.put(Constants.EFFECTIVE_DATE, Instant.now());
 				// missingAttributes.add(Constants.EFFECTIVE_DATE);
 			} else {
-				Timestamp effectiveDate1 = new Timestamp(effectiveDate.getTime());
+				Timestamp effectiveDate1 = Timestamp.valueOf(effectiveDate);
 				if (effectiveDate1 == null) {
 					errList.add("Invalid effectiveDate format.");
 				} else {
