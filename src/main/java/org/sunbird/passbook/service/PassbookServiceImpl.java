@@ -16,7 +16,6 @@ import org.sunbird.common.model.SBApiResponse;
 import org.sunbird.common.util.CbExtServerProperties;
 import org.sunbird.common.util.Constants;
 import org.sunbird.common.util.ProjectUtil;
-import org.sunbird.passbook.parser.CompetencyPassbookParser;
 import org.sunbird.passbook.parser.PassbookParser;
 import org.sunbird.passbook.parser.PassbookParserHandler;
 
@@ -211,15 +210,20 @@ public class PassbookServiceImpl implements PassbookService {
 		return parserHanlder.getPassbookParser(typeName);
 	}
 
-	public void migrateData(){
+	public SBApiResponse migrateData(){
 		List<Map<String, Object>> passbookList = cassandraOperation.getRecordsByProperties(Constants.DATABASE,
 				Constants.USER_PASSBOOK_TABLE_OLD, null, null);
-		passbookList.forEach(item -> item.forEach((k, v) -> System.out.println(k + ": " + v)));
-		SBApiResponse response = ProjectUtil.createDefaultResponse(Constants.PASSBOOK_READ_API);
+		SBApiResponse response = ProjectUtil.createDefaultResponse(Constants.PASSBOOK_MIGRATE_API);
+		if(passbookList.size()==0){
+			response.getParams().setStatus(Constants.FAILED);
+			response.getParams().setErrmsg("No data available to migrate");
+			response.setResponseCode(HttpStatus.BAD_REQUEST);
+		}
 		for (Map<String, Object> requestMap : passbookList){
 			Timestamp time = ProjectUtil.getTimestampFromUUID((UUID) requestMap.get(Constants.EFFECTIVE_DATE));
  			requestMap.put(Constants.EFFECTIVE_DATE,time);
 			cassandraOperation.insertRecord(Constants.KEYSPACE_SUNBIRD,Constants.USER_PASSBOOK_TABLE,requestMap);
 		}
+		return response;
 	}
 }

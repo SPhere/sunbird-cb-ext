@@ -17,5 +17,5 @@ public interface PassbookService {
 	
 	public SBApiResponse updatePassbook(String requestedUserId, Map<String, Object> request);
 
-	public void migrateData();
+	public SBApiResponse migrateData();
 }

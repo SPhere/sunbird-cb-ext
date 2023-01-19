@@ -479,8 +479,9 @@ public class Constants {
 	public static final String COMPETENCY_DETAILS = "competencyDetails";
 	public static final String COMPETENCY_ID = "competencyId";
 	public static final long NUM_100NS_INTERVALS_SINCE_UUID_EPOCH = 0x01b21dd213814000L;
+    public static String PASSBOOK_MIGRATE_API = "user.passbook.migrate";
 
-	private Constants() {
+    private Constants() {
 		throw new IllegalStateException("Utility class");
 	}
 

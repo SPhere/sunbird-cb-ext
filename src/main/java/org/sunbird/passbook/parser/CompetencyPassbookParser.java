@@ -202,16 +202,16 @@ public class CompetencyPassbookParser implements PassbookParser {
 			} else {
 				competency.put(Constants.CONTEXT_ID, competencyLevelId);
 			}
-			String effectiveDate = (String) acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
-			if (StringUtils.isBlank(String.valueOf(effectiveDate))) {
+			String strEffectiveDate = (String) acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
+			if (StringUtils.isBlank(strEffectiveDate)) {
 				competency.put(Constants.EFFECTIVE_DATE, Instant.now());
 				// missingAttributes.add(Constants.EFFECTIVE_DATE);
 			} else {
-				Timestamp effectiveDate1 = Timestamp.valueOf(effectiveDate);
-				if (effectiveDate1 == null) {
+				Timestamp effectiveDate = Timestamp.valueOf(strEffectiveDate);
+				if (effectiveDate == null) {
 					errList.add("Invalid effectiveDate format.");
 				} else {
-					competency.put(Constants.EFFECTIVE_DATE, effectiveDate1);
+					competency.put(Constants.EFFECTIVE_DATE, effectiveDate);
 				}
 			}
 		}
