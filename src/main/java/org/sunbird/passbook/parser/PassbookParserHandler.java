@@ -6,15 +6,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class PassbookParserHandler {
 
-	@Autowired
-	private CompetencyPassbookParser competencyPassbookParser;
+    @Autowired
+    private CompetencyPassbookParser competencyPassbookParser;
 
-	public PassbookParser getPassbookParser(String typeName) {
-		switch (typeName) {
-		case "competency":
-			return competencyPassbookParser;
-		default:
-			return null;
-		}
-	}
+    public PassbookParser getPassbookParser(String typeName) {
+        switch (typeName) {
+            case "competency":
+                return competencyPassbookParser;
+            default:
+                return null;
+        }
+    }
 }
