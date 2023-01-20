@@ -1,34 +1,36 @@
 package org.sunbird.passbook.parser;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.UUID;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.sunbird.common.model.SBApiResponse;
 import org.sunbird.common.util.CbExtServerProperties;
 import org.sunbird.common.util.Constants;
-import org.sunbird.common.util.ProjectUtil;
 import org.sunbird.passbook.competency.model.CompetencyInfo;
 import org.sunbird.passbook.competency.model.CompetencyPassbookInfo;
 import org.sunbird.passbook.model.PassbookDBInfo;
 
-import com.datastax.driver.core.utils.UUIDs;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class CompetencyPassbookParser implements PassbookParser {
 
+	private Logger logger = LoggerFactory.getLogger(CompetencyPassbookParser.class);
+	
 	@Autowired
 	CbExtServerProperties serverProperties;
 
@@ -65,12 +67,9 @@ public class CompetencyPassbookParser implements PassbookParser {
 			Map<String, Object> acquiredDetail = new HashMap<String, Object>();
 			acquiredDetail.put(Constants.ACQUIRED_CHANNEL, (String) competencyObj.get(Constants.ACQUIRED_CHANNEL));
 			acquiredDetail.put(Constants.COMPETENCY_LEVEL_ID, (String) competencyObj.get(Constants.CONTEXT_ID));
-			acquiredDetail.put(Constants.EFFECTIVE_DATE,
-					ProjectUtil.getTimestampFromUUID((UUID) competencyObj.get(Constants.EFFECTIVE_DATE)));
-			acquiredDetail.put(Constants.ADDITIONAL_PARAM,
-					(Map<String, Object>) competencyObj.get(Constants.ACQUIRED_DETAILS));
-			Map<String, Object> acquiredDetailAdditionalParam = (Map<String, Object>) competencyObj
-					.get(Constants.ACQUIRED_DETAILS);
+			acquiredDetail.put(Constants.EFFECTIVE_DATE, competencyObj.get(Constants.EFFECTIVE_DATE));
+			acquiredDetail.put(Constants.ADDITIONAL_PARAM,(Map<String, Object>) competencyObj.get(Constants.ACQUIRED_DETAILS));
+			Map<String, Object> acquiredDetailAdditionalParam = (Map<String, Object>) competencyObj.get(Constants.ACQUIRED_DETAILS);
 
 			Iterator<Entry<String, Object>> iterator = acquiredDetailAdditionalParam.entrySet().iterator();
 			while (iterator.hasNext()) {
@@ -208,16 +207,16 @@ public class CompetencyPassbookParser implements PassbookParser {
 				competency.put(Constants.CONTEXT_ID, competencyLevelId);
 			}
 
-			String effectiveDate = (String) acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
-			if (StringUtils.isBlank(effectiveDate)) {
-				competency.put(Constants.EFFECTIVE_DATE, UUIDs.timeBased());
+			String strEffectiveDate = (String) acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
+			if (StringUtils.isBlank(strEffectiveDate)) {
+				competency.put(Constants.EFFECTIVE_DATE, Instant.now());
 				// missingAttributes.add(Constants.EFFECTIVE_DATE);
 			} else {
-				UUID effectiveDateUUID = ProjectUtil.getUUIDFromTimeStamp(effectiveDate);
-				if (effectiveDateUUID == null) {
-					errList.add("Invalid effectiveDate format.");
-				} else {
-					competency.put(Constants.EFFECTIVE_DATE, ProjectUtil.getUUIDFromTimeStamp(effectiveDate));
+				try {
+					Timestamp effectiveDate = Timestamp.valueOf(strEffectiveDate);
+					competency.put(Constants.EFFECTIVE_DATE, effectiveDate);
+				} catch (IllegalArgumentException e) {
+					logger.error(String.format("Failed to parse date: %s, Exception: ", strEffectiveDate), e);
 				}
 			}
 		}

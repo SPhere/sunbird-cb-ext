@@ -16,4 +16,6 @@ public interface PassbookService {
 	public SBApiResponse getPassbookByAdmin(String requestedId, Map<String, Object> request);
 	
 	public SBApiResponse updatePassbook(String requestedUserId, Map<String, Object> request);
+	
+	public SBApiResponse migrateData();
 }

@@ -1,5 +1,6 @@
 package org.sunbird.passbook.model;
 
+import java.sql.Timestamp;
 import java.util.Map;
 
 public class PassbookDBInfo {
@@ -8,7 +9,7 @@ public class PassbookDBInfo {
 	private String acquiredChannel;
 	private String typeId;
 	private String contextId;
-	private String effectiveDate;
+	private Timestamp effectiveDate;
 	private Map<String, String> additionalParams;
 	private Map<String, String> acquiredDetails;
 
@@ -52,11 +53,11 @@ public class PassbookDBInfo {
 		this.contextId = contextId;
 	}
 
-	public String getEffectiveDate() {
+	public Timestamp getEffectiveDate() {
 		return effectiveDate;
 	}
 
-	public void setEffectiveDate(String effectiveDate) {
+	public void setEffectiveDate(Timestamp effectiveDate) {
 		this.effectiveDate = effectiveDate;
 	}
 	

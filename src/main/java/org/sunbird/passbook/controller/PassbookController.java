@@ -45,4 +45,10 @@ public class PassbookController {
 		SBApiResponse response = passbookService.getPassbookByAdmin(requestedUserId, request);
 		return new ResponseEntity<>(response, response.getResponseCode());
 	}
+	
+	@PostMapping("/user/v1/migrateData")
+	public ResponseEntity<SBApiResponse> migrateData() {
+		SBApiResponse response = passbookService.migrateData();
+		return new ResponseEntity<>(response, response.getResponseCode());
+	}
 }
