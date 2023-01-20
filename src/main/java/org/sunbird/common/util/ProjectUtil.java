@@ -1,12 +1,10 @@
 package org.sunbird.common.util;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
@@ -20,6 +18,8 @@ import org.sunbird.common.model.SunbirdApiRespParam;
 
 import com.datastax.driver.core.utils.UUIDs;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static java.lang.Long.parseLong;
 
 /**
  * This class will contains all the common utility methods.
