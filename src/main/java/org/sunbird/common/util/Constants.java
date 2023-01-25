@@ -479,6 +479,8 @@ public class Constants {
 	public static final long NUM_100NS_INTERVALS_SINCE_UUID_EPOCH = 0x01b21dd213814000L;
 	public static final String USER_PASSBOOK_TABLE_OLD = "user_passbook_v2";
 	public static final String PASSBOOK_MIGRATE_API = "user.passbook.migrate";
+	public static final String BATCHES = "batches";
+	public static final String QUERY = "query";
 
 	private Constants() {
 		throw new IllegalStateException("Utility class");

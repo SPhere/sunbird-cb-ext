@@ -317,6 +317,17 @@ public class CbExtServerProperties {
 	
 	@Value("${user.passbook.supported.typename}")
 	private String userPassbookSupportedTypeName;
+	
+	@Value("${km.base.content.search}")
+	private String kmBaseContentSearch;
+
+	public String getKmBaseContentSearch() {
+		return kmBaseContentSearch;
+	}
+
+	public void setKmBaseContentSearch(String kmBaseContentSearch) {
+		this.kmBaseContentSearch = kmBaseContentSearch;
+	}
 
 	public String getUserAssessmentSubmissionDuration() {
 		return userAssessmentSubmissionDuration;
