@@ -209,7 +209,7 @@ public class CompetencyPassbookParser implements PassbookParser {
 
 			String strEffectiveDate = (String) acquiredDetailsMap.get(Constants.EFFECTIVE_DATE);
 			if (StringUtils.isBlank(strEffectiveDate)) {
-				competency.put(Constants.EFFECTIVE_DATE, Instant.now());
+				competency.put(Constants.EFFECTIVE_DATE, Timestamp.from(Instant.now()));
 				// missingAttributes.add(Constants.EFFECTIVE_DATE);
 			} else {
 				try {
