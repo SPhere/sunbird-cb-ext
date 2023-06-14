@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.stereotype.Component;
 import org.sunbird.common.service.OutboundRequestHandlerServiceImpl;
 import org.sunbird.common.util.CbExtServerProperties;
@@ -54,9 +53,7 @@ public class UserRegistrationConsumer {
 	UserRegistrationNotificationService userRegNotificationService;
 
 	@SuppressWarnings("unchecked")
-	@KafkaListener(topicPartitions = {
-			@TopicPartition(topic = "${kafka.topics.user.registration.register.event}", partitions = { "0", "1", "2",
-					"3" }) })
+	@KafkaListener(topics = "${kafka.topics.user.registration.register.event}",groupId = "${kafka.topics.user.registration.register.event.consumer.group}" )
 	public void processMessage(ConsumerRecord<String, String> data) {
 		UserRegistration userRegistration = gson.fromJson(data.value(), UserRegistration.class);
 		/*
@@ -98,9 +95,7 @@ public class UserRegistrationConsumer {
 		userRegNotificationService.sendNotification(userRegistration);
 	}
 
-	@KafkaListener(topicPartitions = {
-			@TopicPartition(topic = "${kafka.topics.user.registration.createUser}", partitions = { "0", "1", "2",
-					"3" }) })
+	@KafkaListener(topics = "${kafka.topics.user.registration.createUser}",groupId = "${kafka.topics.user.registration.createUser.consumer.group}")
 	public void processCreateUserMessage(ConsumerRecord<String, String> data) {
 		try {
 			WfRequest wfRequest = gson.fromJson(data.value(), WfRequest.class);
@@ -112,9 +107,7 @@ public class UserRegistrationConsumer {
 		}
 	}
 
-	@KafkaListener(topicPartitions = {
-			@TopicPartition(topic = "${kafka.topics.user.registration.auto.createUser}", partitions = { "0", "1", "2",
-					"3" }) })
+	@KafkaListener(topics = "${kafka.topics.user.registration.auto.createUser}",groupId = "${kafka.topics.user.registration.auto.createUser.consumer.group}")
 	public void processAutoCreateUserEvent(ConsumerRecord<String, String> data) {
 		try {
 			UserRegistration userRegistration = gson.fromJson(data.value(), UserRegistration.class);
@@ -134,7 +127,7 @@ public class UserRegistrationConsumer {
 		wfRequest.setUserId(uuid);
 		wfRequest.setActorUserId(uuid);
 		wfRequest.setApplicationId(userRegistration.getRegistrationCode());
-		wfRequest.setDeptName(userRegistration.getDeptName());
+		wfRequest.setDeptName(userRegistration.getOrgName());
 		wfRequest.setServiceName(serverProperties.getUserRegistrationWorkFlowServiceName());
 		wfRequest.setUpdateFieldValues(Arrays.asList(new HashMap<>()));
 		return wfRequest;

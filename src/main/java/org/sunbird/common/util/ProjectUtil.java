@@ -12,6 +12,9 @@ import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.springframework.http.HttpStatus;
 import org.sunbird.common.exceptions.ProjectCommonException;
 import org.sunbird.common.exceptions.ResponseCode;
@@ -20,6 +23,7 @@ import org.sunbird.common.model.SunbirdApiRespParam;
 
 import com.datastax.driver.core.utils.UUIDs;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.sunbird.core.logger.CbExtLogger;
 
 /**
  * This class will contains all the common utility methods.

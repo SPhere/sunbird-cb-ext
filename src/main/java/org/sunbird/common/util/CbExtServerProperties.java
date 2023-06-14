@@ -1,10 +1,12 @@
 package org.sunbird.common.util;
 
-import java.util.Arrays;
-import java.util.List;
-
+import org.codehaus.plexus.util.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 public class CbExtServerProperties {
@@ -174,17 +176,20 @@ public class CbExtServerProperties {
 	@Value("${cache.max.ttl}")
 	private long cacheMaxTTL;
 
-	@Value("${azure.container.name}")
-	private String azureContainerName;
+	@Value("${cloud.container.name}")
+	private String cloudContainerName;
 
-	@Value("${azure.type.name}")
-	private String azureTypeName;
+	@Value("${cloud.storage.type.name}")
+	private String cloudStorageTypeName;
 
-	@Value("${azure.identity.name}")
-	private String azureIdentityName;
+	@Value("${cloud.storage.key}")
+	private String cloudStorageKey;
 
-	@Value("${azure.storage.key}")
-	private String azureStorageKey;
+	@Value("${cloud.storage.secret}")
+	private String cloudStorageSecret;
+
+	@Value("${cloud.storage.cephs3.endpoint}")
+	private String cloudStorageCephs3Endpoint;
 
 	@Value("${redis.host.name}")
 	private String redisHostName;
@@ -233,6 +238,9 @@ public class CbExtServerProperties {
 
 	@Value("${es.user.registration.index}")
 	private String userRegistrationIndex;
+
+	@Value("${es.org.onboarding.index}")
+	private String orgOnboardingIndex;
 
 	@Value("${user.registration.code.prefix}")
 	private String userRegCodePrefix;
@@ -305,19 +313,19 @@ public class CbExtServerProperties {
 
 	@Value("${user.registration.custodian.orgName}")
 	private String custodianOrgName;
-	
+
 	@Value("${user.position.master.list.file}")
 	private String masterPositionListFileName;
-	
+
 	@Value("${user.registration.welcome.email.template}")
 	private String welcomeEmailTemplate;
-	
+
 	@Value("${user.registration.welcome.email.subject}")
 	private String welcomeEmailSubject;
-	
+
 	@Value("${user.passbook.supported.typename}")
 	private String userPassbookSupportedTypeName;
-	
+
 	@Value("${km.base.content.search}")
 	private String kmBaseContentSearch;
 
@@ -328,6 +336,117 @@ public class CbExtServerProperties {
 	public void setKmBaseContentSearch(String kmBaseContentSearch) {
 		this.kmBaseContentSearch = kmBaseContentSearch;
 	}
+
+	@Value("${sb.org.create.path}")
+	private String lmsOrgCreatePath;
+
+	@Value("${es.user.auto.complete.search.fields}")
+	private String esAutoCompleteSearchFields;
+
+	@Value("${es.user.auto.complete.include.fields}")
+	private String esAutoCompleteIncludeFields;
+
+	@Value("${sb.service.user.migrate.path}")
+	private String lmsUserMigratePath;
+
+	@Value("${km.base.composite.search.fields}")
+	private String kmCompositeSearchFields;
+
+	@Value("${km.base.composite.search.filters.primaryCategory}")
+	private String kmCompositeSearchPrimaryCategoryFilters;
+
+	@Value("${sb.data.sync.path}")
+	private String lmsDataSyncPath;
+
+	@Value("${sb.es.host}")
+	private String sbEsHost;
+
+	@Value("${sb.es.port}")
+	private String sbEsPort;
+
+	@Value("${sb.es.username}")
+	private String sbEsUser;
+
+	@Value("${sb.es.password}")
+	private String sbEsPassword;
+
+	@Value("${km.base.content.search}")
+	private String kmBaseContentSearch;
+
+	@Value("${sb.es.user.profile.index}")
+	private String sbEsUserProfileIndex;
+
+	@Value("${sb.service.signup.user}")
+	private String lmsUserSignUpPath;
+
+	@Value("${user.bulk.upload.status.fields}")
+	private String bulkUploadStatusFields;
+
+	@Value("${user.bulk.upload.container.name}")
+	private String bulkUploadContainerName;
+
+	@Value("${user.bulk.upload.email.template}")
+	private String bulkUploadEmailTemplate;
+
+	@Value("${user.bulk.upload.email.notification.list}")
+	private String bulkUploadEmailNotificationList;
+
+	@Value("${user.bulk.upload.email.notification.subject}")
+	private String bulkUploadEmailNotificationSubject;
+
+	@Value("${incomplete.course.alert.message.key}")
+	private String incompleteCourseAlertMessageKey;
+
+	@Value("${latest.course.alert.message.key}")
+	private String latestCourseAlertMessageKey;
+
+	@Value("${incomplete.courses.alert.enabled}")
+	private boolean incompleteCoursesAlertEnabled;
+
+	@Value("${incomplete.courses.alert.last.access.time.mills}")
+	private long incompleteCoursesLastAccessTime;
+
+	@Value("${latest.courses.alert.enabled}")
+	private boolean latestCoursesAlertEnabled;
+
+	@Value("${latest.courses.alert.user.email.list}")
+	private String latestCoursesAlertUserEmailList;
+
+	@Value("${latest.courses.alert.email.subject}")
+	private String latestCoursesAlertEmailSubject;
+
+	@Value("${latest.courses.alert.scheduler.time.gap}")
+	private long latestCoursesAlertSchedulerTimeGap;
+
+	@Value("${latest.courses.alert.content.limit}")
+	private int latestCoursesAlertContentLimit;
+
+	@Value("${latest.courses.alert.search.user.fields}")
+	private String latestCoursesAlertSearchUserFields;
+
+	@Value("${latest.courses.alert.search.content.fields}")
+	private String latestCoursesAlertSearchContentFields;
+
+	@Value("${latest.courses.alert.send.to.all.user}")
+	private boolean latestCoursesAlertSendToAllUser;
+
+	@Value("${latest.courses.alert.content.min.limit}")
+	private int latestCoursesAlertContentMinLimit;
+
+	@Value("${sender.mail}")
+	private String senderEmailAddress;
+
+	@Value("${notification.service.host}")
+	private String notificationServiceHost;
+
+	@Value("${notification.event.endpoint}")
+	private String notificationEventEndpoint;
+
+	@Value("${course.url}")
+	private String courseLinkUrl;
+
+	@Value("${es.user.report.include.fields}")
+	private String esUserReportIncludeFields;
 
 	public String getUserAssessmentSubmissionDuration() {
 		return userAssessmentSubmissionDuration;
@@ -812,36 +931,44 @@ public class CbExtServerProperties {
 		this.cacheMaxTTL = cacheMaxTTL;
 	}
 
-	public String getAzureContainerName() {
-		return azureContainerName;
+	public String getCloudContainerName() {
+		return cloudContainerName;
 	}
 
-	public void setAzureContainerName(String azureContainerName) {
-		this.azureContainerName = azureContainerName;
+	public void setCloudContainerName(String cloudContainerName) {
+		this.cloudContainerName = cloudContainerName;
 	}
 
-	public String getAzureTypeName() {
-		return azureTypeName;
+	public String getCloudStorageTypeName() {
+		return cloudStorageTypeName;
 	}
 
-	public void setAzureTypeName(String azureTypeName) {
-		this.azureTypeName = azureTypeName;
+	public void setCloudStorageTypeName(String cloudStorageTypeName) {
+		this.cloudStorageTypeName = cloudStorageTypeName;
 	}
 
-	public String getAzureIdentityName() {
-		return azureIdentityName;
+	public String getCloudStorageKey() {
+		return cloudStorageKey;
 	}
 
-	public void setAzureIdentityName(String azureIdentityName) {
-		this.azureIdentityName = azureIdentityName;
+	public void setCloudStorageKey(String cloudStorageKey) {
+		this.cloudStorageKey = cloudStorageKey;
 	}
 
-	public String getAzureStorageKey() {
-		return azureStorageKey;
+	public String getCloudStorageSecret() {
+		return cloudStorageSecret;
 	}
 
-	public void setAzureStorageKey(String azureStorageKey) {
-		this.azureStorageKey = azureStorageKey;
+	public void setCloudStorageSecret(String cloudStorageSecret) {
+		this.cloudStorageSecret = cloudStorageSecret;
+	}
+
+	public String getCloudStorageCephs3Endpoint() {
+		return cloudStorageCephs3Endpoint;
+	}
+
+	public void setCloudStorageCephs3Endpoint(String cloudStorageCephs3Endpoint) {
+		this.cloudStorageCephs3Endpoint = cloudStorageCephs3Endpoint;
 	}
 
 	public String getUserUtilityTopic() {
@@ -1170,5 +1297,313 @@ public class CbExtServerProperties {
 
 	public void setUserPassbookSupportedTypeName(String userPassbookSupportedTypeName) {
 		this.userPassbookSupportedTypeName = userPassbookSupportedTypeName;
+	}
+
+	public String getOrgOnboardingIndex() {
+		return orgOnboardingIndex;
+	}
+
+	public void setOrgOnboardingIndex(String orgOnboardingIndex) {
+		this.orgOnboardingIndex = orgOnboardingIndex;
+	}
+
+	public String getLmsOrgCreatePath() {
+		return lmsOrgCreatePath;
+	}
+
+	public void setLmsOrgCreatePath(String lmsOrgCreatePath) {
+		this.lmsOrgCreatePath = lmsOrgCreatePath;
+	}
+
+	public String getLmsUserMigratePath() {
+		return lmsUserMigratePath;
+	}
+
+	public void setLmsUserMigratePath(String lmsUserSelfMigratePath) {
+		this.lmsUserMigratePath = lmsUserSelfMigratePath;
+	}
+
+	public String getLmsDataSyncPath() {
+		return lmsDataSyncPath;
+	}
+
+	public void setLmsDataSyncPath(String lmsDataSyncPath) {
+		this.lmsDataSyncPath = lmsDataSyncPath;
+	}
+
+	public List<String> getKmCompositeSearchFields() {
+		return Arrays.asList(kmCompositeSearchFields.split(",", -1));
+	}
+
+	public void setKmCompositeSearchFields(String kmCompositeSearchFields) {
+		this.kmCompositeSearchFields = kmCompositeSearchFields;
+	}
+
+	public List<String> getKmCompositeSearchPrimaryCategoryFilters() {
+		return Arrays.asList(kmCompositeSearchPrimaryCategoryFilters.split(",", -1));
+	}
+
+	public void setKmCompositeSearchPrimaryCategoryFilters(String kmCompositeSearchPrimaryCategoryFilters) {
+		this.kmCompositeSearchPrimaryCategoryFilters = kmCompositeSearchPrimaryCategoryFilters;
+	}
+
+	public List<String> getEsAutoCompleteSearchFields() {
+		return Arrays.asList(esAutoCompleteSearchFields.split(",", -1));
+	}
+
+	public void setEsAutoCompleteSearchFields(String esAutoCompleteSearchFields) {
+		this.esAutoCompleteSearchFields = esAutoCompleteSearchFields;
+	}
+
+	public String[] getEsAutoCompleteIncludeFields() {
+		return esAutoCompleteIncludeFields.split(",", -1);
+	}
+
+	public void setEsAutoCompleteIncludeFields(String esAutoCompleteIncludeFields) {
+		this.esAutoCompleteIncludeFields = esAutoCompleteIncludeFields;
+	}
+
+	public String getSbEsHost() {
+		return sbEsHost;
+	}
+
+	public void setSbEsHost(String sbEsHost) {
+		this.sbEsHost = sbEsHost;
+	}
+
+	public String getSbEsPort() {
+		return sbEsPort;
+	}
+
+	public void setSbEsPort(String sbEsPort) {
+		this.sbEsPort = sbEsPort;
+	}
+
+	public String getSbEsUser() {
+		return sbEsUser;
+	}
+
+	public void setSbEsUser(String sbEsUser) {
+		this.sbEsUser = sbEsUser;
+	}
+
+	public String getSbEsPassword() {
+		return sbEsPassword;
+	}
+
+	public void setSbEsPassword(String sbEsPassword) {
+		this.sbEsPassword = sbEsPassword;
+	}
+
+	public String getKmBaseContentSearch() {
+		return kmBaseContentSearch;
+	}
+
+	public void setKmBaseContentSearch(String kmBaseContentSearch) {
+		this.kmBaseContentSearch = kmBaseContentSearch;
+	}
+
+	public String getSbEsUserProfileIndex() {
+		return sbEsUserProfileIndex;
+	}
+
+	public void setSbEsUserProfileIndex(String sbEsUserProfileIndex) {
+		this.sbEsUserProfileIndex = sbEsUserProfileIndex;
+	}
+
+	public String getLmsUserSignUpPath() {
+		return lmsUserSignUpPath;
+	}
+
+	public void setLmsUserSignUpPath(String lmsUserSignUpPath) {
+		this.lmsUserSignUpPath = lmsUserSignUpPath;
+	}
+
+	public List<String> getBulkUploadStatusFields() {
+		return Arrays.asList(bulkUploadStatusFields.split(",", -1));
+	}
+
+	public void setBulkUploadStatusFields(String bulkUploadStatusFields) {
+		this.bulkUploadStatusFields = bulkUploadStatusFields;
+	}
+
+	public String getBulkUploadContainerName() {
+		return bulkUploadContainerName;
+	}
+
+	public void setBulkUploadContainerName(String bulkUploadContainerName) {
+		this.bulkUploadContainerName = bulkUploadContainerName;
+	}
+
+	public String getBulkUploadEmailTemplate() {
+		return bulkUploadEmailTemplate;
+	}
+
+	public void setBulkUploadEmailTemplate(String bulkUploadEmailTemplate) {
+		this.bulkUploadEmailTemplate = bulkUploadEmailTemplate;
+	}
+
+	public List<String> getBulkUploadEmailNotificationList() {
+		return Arrays.asList(bulkUploadEmailNotificationList.split(",", -1));
+	}
+
+	public void setBulkUploadEmailNotificationList(String bulkUploadEmailNotificationList) {
+		this.bulkUploadEmailNotificationList = bulkUploadEmailNotificationList;
+	}
+
+	public String getBulkUploadEmailNotificationSubject() {
+		return bulkUploadEmailNotificationSubject;
+	}
+
+	public void setBulkUploadEmailNotificationSubject(String bulkUploadEmailNotificationSubject) {
+		this.bulkUploadEmailNotificationSubject = bulkUploadEmailNotificationSubject;
+	}
+
+	public String getIncompleteCourseAlertMessageKey() {
+		return incompleteCourseAlertMessageKey;
+	}
+
+	public void setIncompleteCourseAlertMessageKey(String incompleteCourseAlertMessageKey) {
+		this.incompleteCourseAlertMessageKey = incompleteCourseAlertMessageKey;
+	}
+
+	public String getLatestCourseAlertMessageKey() {
+		return latestCourseAlertMessageKey;
+	}
+
+	public void setLatestCourseAlertMessageKey(String latestCourseAlertMessageKey) {
+		this.latestCourseAlertMessageKey = latestCourseAlertMessageKey;
+	}
+
+	public boolean isIncompleteCoursesAlertEnabled() {
+		return incompleteCoursesAlertEnabled;
+	}
+
+	public void setIncompleteCoursesAlertEnabled(boolean incompleteCoursesAlertEnabled) {
+		this.incompleteCoursesAlertEnabled = incompleteCoursesAlertEnabled;
+	}
+
+	public long getIncompleteCoursesLastAccessTime() {
+		return incompleteCoursesLastAccessTime;
+	}
+
+	public void setIncompleteCoursesLastAccessTime(long incompleteCoursesLastAccessTime) {
+		this.incompleteCoursesLastAccessTime = incompleteCoursesLastAccessTime;
+	}
+
+	public boolean isLatestCoursesAlertEnabled() {
+		return latestCoursesAlertEnabled;
+	}
+
+	public void setLatestCoursesAlertEnabled(boolean latestCoursesAlertEnabled) {
+		this.latestCoursesAlertEnabled = latestCoursesAlertEnabled;
+	}
+
+	public List<String> getLatestCoursesAlertUserEmailList() {
+		if (StringUtils.isNotBlank(latestCoursesAlertUserEmailList)) {
+			return Arrays.asList(latestCoursesAlertUserEmailList.split(",", -1));
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
+	public void setLatestCoursesAlertUserEmailList(String latestCoursesAlertUserEmailList) {
+		this.latestCoursesAlertUserEmailList = latestCoursesAlertUserEmailList;
+	}
+
+	public String getLatestCoursesAlertEmailSubject() {
+		return latestCoursesAlertEmailSubject;
+	}
+
+	public void setLatestCoursesAlertEmailSubject(String latestCoursesAlertEmailSubject) {
+		this.latestCoursesAlertEmailSubject = latestCoursesAlertEmailSubject;
+	}
+
+	public long getLatestCoursesAlertSchedulerTimeGap() {
+		return latestCoursesAlertSchedulerTimeGap;
+	}
+
+	public void setLatestCoursesAlertSchedulerTimeGap(long latestCoursesAlertSchedulerTimeGap) {
+		this.latestCoursesAlertSchedulerTimeGap = latestCoursesAlertSchedulerTimeGap;
+	}
+
+	public int getLatestCoursesAlertContentLimit() {
+		return latestCoursesAlertContentLimit;
+	}
+
+	public void setLatestCoursesAlertContentLimit(int latestCoursesAlertContentLimit) {
+		this.latestCoursesAlertContentLimit = latestCoursesAlertContentLimit;
+	}
+
+	public List<String> getLatestCoursesAlertSearchUserFields() {
+		return Arrays.asList(latestCoursesAlertSearchUserFields.split(",", -1));
+	}
+
+	public void setLatestCoursesAlertSearchUserFields(String latestCoursesAlertSearchUserFields) {
+		this.latestCoursesAlertSearchUserFields = latestCoursesAlertSearchUserFields;
+	}
+
+	public List<String> getLatestCoursesAlertSearchContentFields() {
+		return Arrays.asList(latestCoursesAlertSearchContentFields.split(",", -1));
+	}
+
+	public void setLatestCoursesAlertSearchContentFields(String latestCoursesAlertSearchContentFields) {
+		this.latestCoursesAlertSearchContentFields = latestCoursesAlertSearchContentFields;
+	}
+
+	public boolean isLatestCoursesAlertSendToAllUser() {
+		return latestCoursesAlertSendToAllUser;
+	}
+
+	public void setLatestCoursesAlertSendToAllUser(boolean latestCoursesAlertSendToAllUser) {
+		this.latestCoursesAlertSendToAllUser = latestCoursesAlertSendToAllUser;
+	}
+
+	public int getLatestCoursesAlertContentMinLimit() {
+		return latestCoursesAlertContentMinLimit;
+	}
+
+	public void setLatestCoursesAlertContentMinLimit(int latestCoursesAlertContentMinLimit) {
+		this.latestCoursesAlertContentMinLimit = latestCoursesAlertContentMinLimit;
+	}
+
+	public String getSenderEmailAddress() {
+		return senderEmailAddress;
+	}
+
+	public void setSenderEmailAddress(String senderEmailAddress) {
+		this.senderEmailAddress = senderEmailAddress;
+	}
+
+	public String getNotificationServiceHost() {
+		return notificationServiceHost;
+	}
+
+	public void setNotificationServiceHost(String notificationServiceHost) {
+		this.notificationServiceHost = notificationServiceHost;
+	}
+
+	public String getNotificationEventEndpoint() {
+		return notificationEventEndpoint;
+	}
+
+	public void setNotificationEventEndpoint(String notificationEventEndpoint) {
+		this.notificationEventEndpoint = notificationEventEndpoint;
+	}
+
+	public String getCourseLinkUrl() {
+		return courseLinkUrl;
+	}
+
+	public void setCourseLinkUrl(String courseLinkUrl) {
+		this.courseLinkUrl = courseLinkUrl;
+	}
+
+	public String[] getEsUserReportIncludeFields() {
+		return esUserReportIncludeFields.split(",", -1);
+	}
+
+	public void setEsUserReportIncludeFields(String esUserReportIncludeFields) {
+		this.esUserReportIncludeFields = esUserReportIncludeFields;
 	}
 }

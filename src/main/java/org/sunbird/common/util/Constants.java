@@ -14,6 +14,8 @@ public class Constants {
 	public static final String FIRSTNAME = "firstName";
 	public static final String SURNAME = "surname";
 	public static final String LASTNAME = "lastName";
+	public static final String MOBILE = "mobile";
+	public static final String PHONE = "phone";
 	public static final String CONTACT_PHONE_NUMBER_OFFICE = "contact_phone_number_office";
 	public static final String CONTACT_PHONE_NUMBER_HOME = "contact_phone_number_home";
 	public static final String CONTACT_PHONE_NUMBER_PERSONAL = "contact_phone_number_personal";
@@ -122,6 +124,10 @@ public class Constants {
 	public static final String API_FILE_UPLOAD = "api.file.upload";
 	public static final String API_FILE_DELETE = "api.file.delete";
 	public static final String API_PROFILE_UPDATE = "api.profile.update";
+	public static final String API_GET_EXPLORE_COURSE_DETAIL = "api.explore.course";
+	public static final String API_REFRESH_EXPLORE_COURSE_DETAIL = "api.refresh.explore.course.list";
+
+	public static final String ORG_PROFILE_UPDATE = "org.profile.update";
 	public static final String ID = "id";
 	public static final String ORG_ID = "orgId";
 	public static final String POSITION = "position";
@@ -224,10 +230,12 @@ public class Constants {
 	public static final String TABLE_ORGANIZATION = "organisation";
 	public static final String TABLE_USER_ENROLMENT = "user_enrolments";
 	public static final String TABLE_USER = "user";
+	public static final String TABLE_USER_ROLES = "user_roles";
 	public static final String TABLE_COURSE_BATCH = "course_batch";
 	public static final String TABLE_RATINGS = "ratings";
 	public static final String TABLE_RATINGS_LOOKUP = "ratings_lookup";
 	public static final String TABLE_RATINGS_SUMMARY = "ratings_summary";
+	public static final String TABLE_EXPLORE_COURSE_LIST = "explore_course_list";
 	public static final String VALUE = "value";
 	public static final String DEPT_NAME = "deptName";
 	public static final String PROFILE_DETAILS = "profileDetails";
@@ -310,9 +318,9 @@ public class Constants {
 	public static final String HIERARCHY = "hierarchy";
 	public static final String DEV_HIERARCHY_STORE = "dev_hierarchy_store";
 	public static final String CONTENT_HIERARCHY = "content_hierarchy";
-	public static final String BATCH_ID_ = "batchid";
-	public static final String COURSE_ID_ = "courseid";
-	public static final String COMPLETION_PERCENTAGE_ = "completionpercentage";
+	public static final String BATCH_ID_COLUMN = "batchid";
+	public static final String COURSE_ID_COLUMN = "courseid";
+	public static final String COMPLETION_PERCENTAGE_COLUMN = "completionpercentage";
 	public static final String LAST_ACCESS_TIME = "last_access_time";
 	public static final String SUNBIRD_KEY_SPACE_NAME = "sunbird";
 	public static final String SUNBIRD_COURSES_KEY_SPACE_NAME = "sunbird_courses";
@@ -333,6 +341,7 @@ public class Constants {
 	public static final String SUNBIRD_CASSANDRA_CONSISTENCY_LEVEL = "sunbird_cassandra_consistency_level";
 	public static final String INCOMPLETE_COURSES_MAIL_SUBJECT = "Complete the courses you started";
 	public static final String COURSE = "Course";
+	public static final String COURSE_KEYWORD = "course";
 	public static final String _URL = "_url";
 	public static final String THUMBNAIL = "_thumbnail";
 	public static final String _NAME = "_name";
@@ -350,7 +359,6 @@ public class Constants {
 	public static final String POSTER_IMAGE = "posterImage";
 
 	public static final String COURSE_URL = "course.url";
-	public static final String OVERVIEW_BATCH_ID = "overview.batch";
 	public static final String SENDER_MAIL = "sender.mail";
 	public static final String CASSANDRA_CONFIG_HOST = "cassandra.config.host";
 	public static final String OBJECT_TYPE = "objectType";
@@ -389,7 +397,11 @@ public class Constants {
 	public static final String USER_REGISTRATION_REGISTER_API = "api.user.registration.register";
 	public static final String USER_REGISTRATION_UPDATE_API = "api.user.registration.update";
 	public static final String USER_REGISTRATION_RETRIEVE_API = "api.user.registration.retrieve";
+	public static final String ORG_ONBOARDING_PROFILE_RETRIEVE_API = "api.org.onboarding.retrieve";
 	public static final String USER_REGISTRATION_DEPT_INFO_API = "api.user.registration.dept.info";
+	public static final String API_ORG_LIST = "api.org.list";
+	public static final String API_ORG_EXT_CREATE = "api.org.extended.create";
+	public static final String API_ORG_EXT_SEARCH = "api.org.extended.search";
 	public static final String COUNT = "count";
 
 	// email params
@@ -459,7 +471,101 @@ public class Constants {
 	public static final String LIVE = "Live";
 	public static final String GOVERNMENT = "Government";
 	public static final String ORGANIZATION_TYPE = "organisationType";
+	public static final String ORGANIZATION_SUB_TYPE = "organisationSubType";
 	public static final String FIRST_NAME_LOWER_CASE = "firstname";
+	public static final String SPV = "SPV";
+	public static final String TABLE_ORG_HIERARCHY = "org_hierarchy";
+	public static final String PARENT_MAP_ID = "parentMapId";
+	public static final String MINISTRY = "ministry";
+	public static final String SB_ORG_TYPE = "sbOrgType";
+	public static final String SB_ORG_ID = "sbOrgId";
+	public static final String MAP_ID = "mapId";
+	public static final String SB_ROOT_ORG_ID = "sbRootOrgId";
+	public static final String ERROR_MESSAGE = "errmsg";
+
+	public static final String API_USER_BASIC_INFO = "api.user.basic.info";
+	public static final String API_USER_BASIC_PROFILE_UPDATE = "api.user.basic.profile.update";
+	public static final String TABLE_SYSTEM_SETTINGS = "system_settings";
+	public static final String CUSTODIAN_ORG_ID = "custodianOrgId";
+	public static final String CUSTODIAN_ORG_CHANNEL = "custodianOrgChannel";
+	public static final String ROOT_ORG_ID = "rootOrgId";
+	public static final String IS_UPDATE_REQUIRED = "isUpdateRequired";
+	public static final String USER_ROLES = "userRoles";
+	public static final String X_AUTH_USER_ID = "x-authenticated-userid";
+	public static final String SOFT_DELETE_OLD_ORG = "softDeleteOldOrg";
+	public static final String NOTIFY_MIGRATION = "notifyMigration";
+	public static final String FORCE_MIGRATION = "forceMigration";
+	public static final String PROFILE_DETAILS_LOWER = "profiledetails";
+	public static final String EMPLOYMENT_DETAILS = "employmentDetails";
+	public static final String DEPARTMENT_ID = "departmentId";
+	public static final String ROOT_ORG_ID_LOWER = "rootorgid";
+	public static final String OPERATION_TYPE = "operationType";
+	public static final String SYNC = "sync";
+	public static final String OBJECT_IDS = "objectIds";
+	public static final String USER = "user";
+	public static final String PUBLIC_COURSE_LIST = "exploreOpenCourseList";
+	public static final String LAST_UPDATED_ON = "lastUpdatedOn";
+	public static final String DESCENDING_ORDER = "desc";
+	public static final String X_AUTH_USER_ORG_ID = "x-authenticated-user-orgid";
+	public static final String X_AUTH_USER_ORG_NAME = "x-authenticated-user-orgname";
+	public static final String API_USER_SIGNUP = "api.user.signup";
+	public static final String API_USER_BULK_UPLOAD = "api.user.bulk.upload";
+	public static final String API_USER_BULK_UPLOAD_STATUS = "api.user.bulk.upload.status";
+
+	public static final String API_USER_ENROLMENT_REPORT = "api.user.enrolment.report";
+	public static final String API_USER_REPORT = "api.user.report";
+	public static final String TABLE_USER_BULK_UPLOAD = "user_bulk_upload";
+	public static final String FILE_NAME = "fileName";
+	public static final String FILE_PATH = "filePath";
+	public static final String DATE_CREATED_ON = "dateCreatedOn";
+	public static final String DATE_UPDATE_ON = "dateUpdatedOn";
+	public static final String INITIATED_CAPITAL = "INITIATED";
+	public static final List<String> COURSE_REMINDER_EMAIL_FIELDS = Arrays.asList(RATINGS_USER_ID, BATCH_ID_COLUMN,
+			COURSE_ID_COLUMN, COMPLETION_PERCENTAGE_COLUMN, LAST_ACCESS_TIME);
+	public static final String BATCHES = "batches";
+	public static final String NO_OF_COURSES = "noOfCourses";
+	public static final String _DESCRIPTION = "_description";
+	public static final String EMAIL_TYPE = "emailtype";
+	public static final String NEW_COURSES_EMAIL = "New Courses Email";
+	public static final String EMAIL_RECORD_TABLE = "email_record";
+	public static final String LAST_SENT_DATE = "lastsentdate";
+	public static final String MIN = "min";
+	public static final String MAX = "max";
+	public static final String CONTENT_TYPE_KEY = "contentType";
+	public static final String PARENT_CONTENT_TYPE = "parentContentType";
+	public static final String NEW_COURSES = "newcourses";
+	public static final String OVERVIEW_BATCH_KEY = "/overview?batchId=";
+	public static final String LEAF_NODES_COUNT = "leafNodesCount";
+	public static final String CLIENT_ERROR = "CLIENT_ERROR";
+	public static final String PARENT = "parent";
+	public static final String ORGANISATIONS = "organisations";
+
+	public static final String CIPHER_ALGORITHM = "AES";
+	public static final byte[] CIPHER_KEY = new byte[] { 'T', 'h', 'i', 's', 'A', 's', 'I', 'S', 'e', 'r', 'c', 'e',
+			'K', 't', 'e', 'y' };
+	public static final List<String> DECRYPTED_FIELDS = Arrays.asList("phone", "email");
+	public static final String CREATED_FOR = "createdFor";
+	public static final String COURSE_ORG_ID = "courseOrgId";
+	public static final String COURSE_ORG_NAME = "courseOrgName";
+	public static final String STATUS_ENROLLED = "Enrolled";
+	public static final String STAUTS_IN_PROGRESS = "In-Progress";
+	public static final String STATUS_COMPLETED = "Completed";
+	public static final String CONTENT_STATUS = "contentStatus";
+	public static final String ROLE = "role";
+	public static final String SCOPE = "scope";
+	public static final String SB_SUB_ORG_TYPE = "sbSubOrgType";
+	public static final String ORG_CODE = "orgCode";
+	public static final String MDO = "mdo";
+	public static final String BOARD = "board";
+	public static final String TRAINING_INSTITUTE = "TrainingInstitute";
+
+	public static final List<String> USER_ENROLMENT_REPORT_FIELDS = Arrays.asList(USER_ID, FIRSTNAME, LASTNAME, EMAIL,
+			PHONE, ROOT_ORG_ID, CHANNEL);
+
+	public static final List<String> COURSE_ENROLMENT_REPORT_FIELDS = Arrays.asList(COURSE_ID, NAME, COURSE_ORG_ID,
+			COURSE_ORG_NAME);
+
+	public static final List<String> USER_ENROLMENT_COMMON_FIELDS = Arrays.asList(STATUS, COMPLETION_PERCENTAGE);
 
 	public static final String X_AUTH_USER_ID = "x-authenticated-userid";
 	public static final String PASSBOOK_READ_API = "user.passbook.read";
