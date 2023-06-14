@@ -118,4 +118,8 @@ public class ProjectUtil {
 	public static Object convertSecondsToHrsAndMinutes(int duration) {
 		return null;
 	}
+
+	public static String firstLetterCapitalWithSingleSpace(String name) {
+		return null;
+	}
 }
