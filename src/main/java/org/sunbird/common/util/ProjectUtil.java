@@ -114,4 +114,8 @@ public class ProjectUtil {
 		}
 		return null;
 	}
+
+	public static Object convertSecondsToHrsAndMinutes(int duration) {
+		return null;
+	}
 }
