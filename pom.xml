@@ -166,7 +166,21 @@
 			<version>2.9.8</version>
 		</dependency>
 
-
+		<!-- Apache POI - for generating CSV / XLS Reports. -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

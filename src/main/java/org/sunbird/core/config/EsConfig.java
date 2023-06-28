@@ -12,26 +12,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.sunbird.common.util.CbExtServerProperties;
+import org.springframework.util.StringUtils;
+import org.sunbird.core.logger.CbExtLogger;
+
+import java.util.List;
+
 
 @Configuration
 public class EsConfig {
+	private CbExtLogger logger = new CbExtLogger(getClass().getName());
+	@Autowired
+	CbExtServerProperties configuration;
 
-    @Autowired
-    CbExtServerProperties configuration;
+	@Bean(name = "esClient", destroyMethod = "close")
+	public RestHighLevelClient getCbEsRestClient(CbExtServerProperties configuration) {
+		return createRestClient(configuration.getEsHostList(), configuration.getEsUser(),
+				configuration.getEsPassword());
+	}
 
-    @Bean(destroyMethod = "close")
-    public RestHighLevelClient restHighLevelClient(CbExtServerProperties configuration) {
+	@Bean(name = "sbEsClient", destroyMethod = "close")
+	public RestHighLevelClient getSbESRestClient(CbExtServerProperties configuration) {
+		return createRestClient(configuration.getSbEsHostList(), configuration.getSbEsUser(),
+				configuration.getSbEsPassword());
+	}
 
-        final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY,
-                new UsernamePasswordCredentials(configuration.getEsUser(), configuration.getEsPassword()));
+	private RestHighLevelClient createRestClient(String[] hosts, String user, String password) {
+		final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+		credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(user, password));
 
-        RestClientBuilder builder = RestClient
-                .builder(new HttpHost(configuration.getEsHost(), Integer.parseInt(configuration.getEsPort())))
-                .setHttpClientConfigCallback(
-                        httpClientBuilder -> httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider));
+		HttpHost[] httpHosts = new HttpHost[hosts.length];
+		for (int i = 0; i < httpHosts.length; i++) {
+			String hostIp = hosts[i].split(":")[0];
+			String hostPort = hosts[i].split(":")[1];
+			httpHosts[i] = new HttpHost(hostIp, Integer.parseInt(hostPort));
+		}
 
-        return new RestHighLevelClient(builder);
+		RestClientBuilder builder = RestClient.builder(httpHosts).setHttpClientConfigCallback(
+				httpClientBuilder -> httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider));
 
-    }
+		return new RestHighLevelClient(builder);
+	}
 }

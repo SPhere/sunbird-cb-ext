@@ -1,25 +1,19 @@
 package org.sunbird.common.util;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.sunbird.common.exceptions.ProjectCommonException;
 import org.sunbird.common.exceptions.ResponseCode;
 import org.sunbird.common.model.SBApiResponse;
 import org.sunbird.common.model.SunbirdApiRespParam;
-
-import com.datastax.driver.core.utils.UUIDs;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.sunbird.core.logger.CbExtLogger;
 
 /**
  * This class will contains all the common utility methods.
@@ -27,9 +21,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Manzarul
  */
 public class ProjectUtil {
-	private static Logger logger = LoggerFactory.getLogger(ProjectUtil.class);
 	public static PropertiesCache propertiesCache;
-	private static final ObjectMapper mapper = new ObjectMapper();
+
+	public static CbExtLogger logger = new CbExtLogger(ProjectUtil.class.getName());
 
 	static {
 		propertiesCache = PropertiesCache.getInstance();
@@ -70,10 +64,6 @@ public class ProjectUtil {
 				ResponseCode.CLIENT_ERROR.getResponseCode());
 	}
 
-	public enum Method {
-		GET, POST, PUT, DELETE, PATCH
-	}
-
 	public static SBApiResponse createDefaultResponse(String api) {
 		SBApiResponse response = new SBApiResponse();
 		response.setId(api);
@@ -91,23 +81,72 @@ public class ProjectUtil {
 		return headers;
 	}
 
-	public static Timestamp getTimestampFromUUID(UUID timeStampUUID) {
-		Long timeStamp = (timeStampUUID.timestamp() - Constants.NUM_100NS_INTERVALS_SINCE_UUID_EPOCH) / 10000L;
-		return new Timestamp(timeStamp);
+	public enum Method {
+		GET, POST, PUT, DELETE, PATCH
 	}
 
-	public static UUID getUUIDFromTimeStamp(String time) {
-		try {
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-			Date date = df.parse(time);
-			long epoch = date.getTime();
-
-			long tmp = (epoch - Constants.NUM_100NS_INTERVALS_SINCE_UUID_EPOCH) / 10000;
-			Random random = new Random();
-			return new UUID(UUIDs.startOf(tmp).getMostSignificantBits(), random.nextLong());
-		} catch (Exception e) {
-			logger.error("Failed to convert String to UUID time. Exception :", e);
+	public static String convertSecondsToHrsAndMinutes(int seconds) {
+		String time = "";
+		if (seconds > 60) {
+			int min = (seconds / 60) % 60;
+			int hours = (seconds / 60) / 60;
+			String minutes = (min < 10) ? "0" + min : Integer.toString(min);
+			String strHours = (hours < 10) ? "0" + hours : Integer.toString(hours);
+			if (min > 0 && hours > 0)
+				time = strHours + "h " + minutes + "m";
+			else if (min == 0 && hours > 0)
+				time = strHours + "h";
+			else if (min > 0) {
+				time = minutes + "m";
+			}
 		}
-		return null;
+		return time;
+	}
+
+	public static String firstLetterCapitalWithSingleSpace(final String words) {
+		return Stream.of(words.trim().split("\\s")).filter(word -> word.length() > 0)
+				.map(word -> word.substring(0, 1).toUpperCase() + word.substring(1)).collect(Collectors.joining(" "));
+	}
+
+	/**
+	 * Check the email id is valid or not
+	 *
+	 * @param email String
+	 * @return Boolean
+	 */
+
+	public static Boolean validateEmailPattern(String email) {
+		String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." + "[a-zA-Z0-9_+&*-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-z"
+				+ "A-Z]{2,7}$";
+		Boolean retValue = Boolean.FALSE;
+		Pattern pat = Pattern.compile(emailRegex);
+		if (pat.matcher(email).matches()) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	/**
+	 * Check the contact number is valid or not
+	 *
+	 * @param contactNumber String
+	 * @return Boolean
+	 */
+
+	public static Boolean validateContactPattern(String contactNumber) {
+		String contactNumberRegex = "^\\d{10}$";
+		Pattern pat = Pattern.compile(contactNumberRegex);
+		if (pat.matcher(contactNumber).matches()) {
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
+	}
+
+	public static Boolean validateFirstName(String firstName) {
+		return firstName.matches("^[a-zA-Z]+(([\\'][a-zA-Z])?[a-zA-Z]*)*$");
+	}
+
+	public static Boolean validateLastName(String lastName) {
+		return lastName.matches("[a-zA-Z]*");
 	}
 }
