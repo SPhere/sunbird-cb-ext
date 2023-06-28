@@ -20,21 +20,25 @@ public class AccessTokenValidator {
         try {
             String[] tokenElements = token.split("\\.");
             String header = tokenElements[0];
+            System.out.println(header);
             String body = tokenElements[1];
+            System.out.println(body);
             String signature = tokenElements[2];
+            System.out.println(signature);
+
             String payLoad = header + Constants.DOT_SEPARATOR + body;
-            Map<Object, Object> headerData =
-                    mapper.readValue(new String(decodeFromBase64(header)), Map.class);
+            @SuppressWarnings("unchecked")
+            Map<Object, Object> headerData = mapper.readValue(new String(decodeFromBase64(header)), Map.class);
             String keyId = headerData.get("kid").toString();
-            boolean isValid =
-                    CryptoUtil.verifyRSASign(
-                            payLoad,
-                            decodeFromBase64(signature),
-                            KeyManager.getPublicKey(keyId).getPublicKey(),
-                            Constants.SHA_256_WITH_RSA);
+            System.out.println(keyId);
+            boolean isValid = CryptoUtil.verifyRSASign(
+                    payLoad,
+                    decodeFromBase64(signature),
+                    KeyManager.getPublicKey(keyId).getPublicKey(),
+                    Constants.SHA_256_WITH_RSA);
             if (isValid) {
-                Map<String, Object> tokenBody =
-                        mapper.readValue(new String(decodeFromBase64(body)), Map.class);
+                @SuppressWarnings("unchecked")
+                Map<String, Object> tokenBody = mapper.readValue(new String(decodeFromBase64(body)), Map.class);
                 boolean isExp = isExpired((Integer) tokenBody.get("exp"));
                 if (isExp) {
                     return Collections.EMPTY_MAP;
@@ -46,7 +50,6 @@ public class AccessTokenValidator {
         }
         return Collections.EMPTY_MAP;
     }
-
 
     public static String verifyUserToken(String token) {
         String userId = Constants._UNAUTHORIZED;
@@ -65,18 +68,20 @@ public class AccessTokenValidator {
         return userId;
     }
 
-	private static boolean checkIss(String iss) {
-		String realmUrl = cache.getProperty(Constants.SSO_URL) + "realms/" + cache.getProperty(Constants.SSO_REALM);
-		if (StringUtils.isBlank(realmUrl))
-			return false;
-		return (realmUrl.equalsIgnoreCase(iss));
-	}
+    private static boolean checkIss(String iss) {
+        String realmUrl = cache.getProperty(Constants.SSO_URL) + "realms/" + cache.getProperty(Constants.SSO_REALM);
+        if (StringUtils.isBlank(realmUrl))
+            return false;
+        return (realmUrl.equalsIgnoreCase(iss));
+    }
 
     private static boolean isExpired(Integer expiration) {
         return (Time.currentTime() > expiration);
     }
 
     private static byte[] decodeFromBase64(String data) {
+        System.out.println("decode");
+        System.out.println(data);
         return Base64Util.decode(data, 11);
     }
 }
