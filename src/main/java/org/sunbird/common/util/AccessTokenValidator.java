@@ -41,6 +41,8 @@ public class AccessTokenValidator {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> tokenBody = mapper.readValue(new String(decodeFromBase64(body)), Map.class);
                 boolean isExp = isExpired((Integer) tokenBody.get("exp"));
+                System.out.println("isexpired");
+                System.out.println(isExp)
                 if (isExp) {
                     return Collections.EMPTY_MAP;
                 }
@@ -57,6 +59,8 @@ public class AccessTokenValidator {
         try {
             Map<String, Object> payload = validateToken(token);
             if (MapUtils.isNotEmpty(payload) && checkIss((String) payload.get("iss"))) {
+                System.out.println("userid");
+                System.out.println(userId);
                 userId = (String) payload.get(Constants.SUB);
                 if (StringUtils.isNotBlank(userId)) {
                     int pos = userId.lastIndexOf(":");
