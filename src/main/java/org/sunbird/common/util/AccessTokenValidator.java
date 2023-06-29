@@ -33,7 +33,7 @@ public class AccessTokenValidator {
             System.out.println(keyId);
             boolean isValid = CryptoUtil.verifyRSASign(
                     payLoad,
-                    decodeFromBase64(signature),
+                    signature,
                     KeyManager.getPublicKey(keyId).getPublicKey(),
                     Constants.SHA_256_WITH_RSA);
             if (isValid) {
