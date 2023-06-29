@@ -46,6 +46,8 @@ public class AccessTokenValidator {
                 if (isExp) {
                     return Collections.EMPTY_MAP;
                 }
+                System.out.println("tokenbody");
+                System.out.println(tokenBody);
                 return tokenBody;
             }
         } catch (IOException e) {
@@ -58,6 +60,8 @@ public class AccessTokenValidator {
         String userId = Constants._UNAUTHORIZED;
         try {
             Map<String, Object> payload = validateToken(token);
+            System.out.println("payload");
+            System.out.println(payload);
             if (MapUtils.isNotEmpty(payload) && checkIss((String) payload.get("iss"))) {
 
                 userId = (String) payload.get(Constants.SUB);
