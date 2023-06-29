@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Map;
 
@@ -31,9 +32,10 @@ public class AccessTokenValidator {
             Map<Object, Object> headerData = mapper.readValue(new String(decodeFromBase64(header)), Map.class);
             String keyId = headerData.get("kid").toString();
             System.out.println(keyId);
+            byte[] sig = Base64.getDecoder().decode(signature);
             boolean isValid = CryptoUtil.verifyRSASign(
                     payLoad,
-                    decodeFromBase64(signature),
+                    (sig),
                     KeyManager.getPublicKey(keyId).getPublicKey(),
                     Constants.SHA_256_WITH_RSA);
             if (isValid) {
