@@ -592,7 +592,7 @@ public class Constants {
 	public static final String IS_CORRECT = "isCorrect";
 	public static final String OPTION_ID = "optionId";
 
-	public static final String TABLE_USER_ASSESSMENT_DATA = "user_assessment_data";
+	public static final String TABLE_USER_ASSESSMENT_DATA = "user_assessment_summary";
 	public static final String TABLE_MASTER_DATA = "master_data";
 
 	public static final String USER_ID_DOESNT_EXIST = "User Id doesn't exist! Please supply a valid auth token";
