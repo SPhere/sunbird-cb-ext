@@ -68,7 +68,7 @@ public class AccessTokenValidator {
                 System.out.println("sub");
                 System.out.println("userid");
                 System.out.println(userId);
-                if (StringUtils.isBlank(userId)) {
+                if (StringUtils.isNotBlank(userId)) {
                     int pos = userId.lastIndexOf(":");
                     userId = userId.substring(pos + 1);
                     System.out.println("inside if");
