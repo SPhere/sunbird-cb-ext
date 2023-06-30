@@ -63,11 +63,13 @@ public class AccessTokenValidator {
             System.out.println("payload");
             System.out.println(payload);
             if (MapUtils.isNotEmpty(payload) && checkIss((String) payload.get("iss"))) {
-
+                System.out.println("came inside if check iss");
                 userId = (String) payload.get(Constants.SUB);
+                System.out.println("sub");
+                System.out.println("sub");
                 System.out.println("userid");
                 System.out.println(userId);
-                if (StringUtils.isNotBlank(userId)) {
+                if (StringUtils.isBlank(userId)) {
                     int pos = userId.lastIndexOf(":");
                     userId = userId.substring(pos + 1);
                     System.out.println("inside if");
