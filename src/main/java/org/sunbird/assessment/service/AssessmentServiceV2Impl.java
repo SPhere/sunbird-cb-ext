@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.net.SyslogAppender;
 import org.joda.time.DateTime;
 import org.mortbay.util.ajax.JSON;
 import org.slf4j.Logger;
@@ -563,10 +564,15 @@ public class AssessmentServiceV2Impl implements AssessmentServiceV2 {
         hierarchySectionList.addAll((List<Map<String, Object>>) assessmentHierarchy.get(Constants.CHILDREN));
         sectionListFromSubmitRequest.addAll((List<Map<String, Object>>) submitRequest.get(Constants.CHILDREN));
         if (((String) (assessmentHierarchy.get(Constants.PRIMARY_CATEGORY)))
-                .equalsIgnoreCase(Constants.PRACTICE_QUESTION_SET))
+                .equalsIgnoreCase(Constants.PRACTICE_QUESTION_SET)) {
+            System.out.println("inside if for question check");
             return "";
+        }
+
         List<Map<String, Object>> existingDataList = assessmentRepository.fetchUserAssessmentDataFromDB(userId,
                 assessmentIdFromRequest);
+        System.out.println("existing data list");
+        System.out.println(existingDataList);
         if (!existingDataList.isEmpty()) {
             System.out.println("inside existing data list");
             if (!((String) existingDataList.get(0).get(Constants.STATUS)).equalsIgnoreCase(Constants.SUBMITTED)) {
