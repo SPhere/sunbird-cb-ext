@@ -81,7 +81,11 @@ public class AccessTokenValidator {
     }
 
     private static boolean checkIss(String iss) {
+        System.out.println("iss");
+        System.out.println(iss);
         String realmUrl = cache.getProperty(Constants.SSO_URL) + "realms/" + cache.getProperty(Constants.SSO_REALM);
+        System.out.println("realmurl");
+        System.out.println(realmUrl);
         if (StringUtils.isBlank(realmUrl))
             return false;
         return (realmUrl.equalsIgnoreCase(iss));
