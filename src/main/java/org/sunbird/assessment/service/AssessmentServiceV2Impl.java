@@ -181,6 +181,8 @@ public class AssessmentServiceV2Impl implements AssessmentServiceV2 {
             List<String> identifierList = new ArrayList<>();
             List<Object> questionList = new ArrayList<>();
             result = validateQuestionListAPI(requestBody, authUserToken, identifierList);
+            System.out.println("get result");
+            System.out.println(result);
             errMsg = result.get(Constants.ERROR_MESSAGE);
             if (errMsg.isEmpty()) {
                 List<String> newIdentifierList = new ArrayList<>();
@@ -196,8 +198,12 @@ public class AssessmentServiceV2Impl implements AssessmentServiceV2 {
                                 result.get(Constants.PRIMARY_CATEGORY)));
                     }
                 }
+                System.out.println("identifier list");
+                System.out.println(newIdentifierList);
                 if (!newIdentifierList.isEmpty()) {
                     List<Map<String, Object>> newQuestionList = assessUtilServ.readQuestionDetails(newIdentifierList);
+                    System.out.println("ne question list");
+                    System.out.println(newQuestionList);
                     if (!newQuestionList.isEmpty()) {
                         for (Map<String, Object> questionMap : newQuestionList) {
                             if (!ObjectUtils.isEmpty(questionMap)
@@ -206,6 +212,8 @@ public class AssessmentServiceV2Impl implements AssessmentServiceV2 {
                                 List<Map<String, Object>> questions = (List<Map<String, Object>>) ((Map<String, Object>) questionMap
                                         .get(Constants.RESULT)).get(Constants.QUESTIONS);
                                 for (Map<String, Object> question : questions) {
+                                    System.out.println("questions");
+                                    System.out.println(questions);
                                     if (!question.isEmpty()) {
                                         redisCacheMgr.putCache(
                                                 Constants.QUESTION_ID + question.get(Constants.IDENTIFIER), question);
@@ -213,6 +221,8 @@ public class AssessmentServiceV2Impl implements AssessmentServiceV2 {
                                                 result.get(Constants.PRIMARY_CATEGORY)));
                                     }
                                 }
+                                System.out.println("question list after for");
+                                System.out.println(questionList);
                             }
                         }
                     } else {
