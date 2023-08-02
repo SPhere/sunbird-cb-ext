@@ -561,15 +561,14 @@ public class ProfileServiceImpl implements ProfileService {
 		System.out.println(response);
 		try {
 			List<Map<String, Object>> userData = getUserSearchData(searchTerm);
-			System.out.println("userData"+ userData);
+			System.out.println("userData" + userData);
 			resultResp.put(Constants.CONTENT, userData);
 			resultResp.put(Constants.COUNT, userData.size());
 			response.setResponseCode(HttpStatus.OK);
 			response.getParams().setStatus(Constants.SUCCESS);
 			response.put(Constants.RESPONSE, resultResp);
 		} catch (Exception e) {
-            e.getStackTrace()
-			response.getParams().setErrmsg("Failed to get user details from ES. Exception: " +  e.getStackTrace());
+			response.getParams().setErrmsg("Failed to get user details from ES. Exception: " + e.getStackTrace());
 		}
 		System.out.println("Came at last");
 		return response;
