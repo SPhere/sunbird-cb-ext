@@ -24,6 +24,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.core.layout.SyslogLayout;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -489,7 +490,7 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	public SBApiResponse userBasicInfo(String userId) {
-			SBApiResponse response = ProjectUtil.createDefaultResponse(Constants.API_USER_BASIC_INFO);
+		SBApiResponse response = ProjectUtil.createDefaultResponse(Constants.API_USER_BASIC_INFO);
 		try {
 			Map<String, Object> userData = userUtilityService.getUsersReadData(userId, StringUtils.EMPTY,
 					StringUtils.EMPTY);
@@ -557,16 +558,20 @@ public class ProfileServiceImpl implements ProfileService {
 
 		response.setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR);
 		Map<String, Object> resultResp = new HashMap<>();
+		System.out.println(response);
 		try {
 			List<Map<String, Object>> userData = getUserSearchData(searchTerm);
+			System.out.println("userData"+ userData);
 			resultResp.put(Constants.CONTENT, userData);
 			resultResp.put(Constants.COUNT, userData.size());
 			response.setResponseCode(HttpStatus.OK);
 			response.getParams().setStatus(Constants.SUCCESS);
 			response.put(Constants.RESPONSE, resultResp);
 		} catch (Exception e) {
-			response.getParams().setErrmsg("Failed to get user details from ES. Exception: " + e.getMessage());
+            e.getStackTrace()
+			response.getParams().setErrmsg("Failed to get user details from ES. Exception: " +  e.getStackTrace());
 		}
+		System.out.println("Came at last");
 		return response;
 	}
 
@@ -1130,11 +1135,13 @@ public class ProfileServiceImpl implements ProfileService {
 		for (String field : serverConfig.getEsAutoCompleteSearchFields()) {
 			query.should(QueryBuilders.matchPhrasePrefixQuery(field, searchTerm));
 		}
-
+		System.out.println(query);
 		final BoolQueryBuilder finalQuery = QueryBuilders.boolQuery();
 		finalQuery.must(QueryBuilders.termQuery(Constants.STATUS, 1)).must(query);
 		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder().query(finalQuery);
 		sourceBuilder.fetchSource(serverConfig.getEsAutoCompleteIncludeFields(), new String[] {});
+		System.out.println("indexname" + serverConfig.getSbEsUserProfileIndex());
+
 		SearchResponse searchResponse = indexerService.getEsResult(serverConfig.getSbEsUserProfileIndex(),
 				serverConfig.getEsProfileIndexType(), sourceBuilder, true);
 		for (SearchHit hit : searchResponse.getHits()) {
@@ -1333,17 +1340,17 @@ public class ProfileServiceImpl implements ProfileService {
 				Integer status = (Integer) enrolment.get(Constants.STATUS);
 				String strStatus = StringUtils.EMPTY;
 				switch (status) {
-				case 0:
-					strStatus = Constants.STATUS_ENROLLED;
-					break;
-				case 1:
-					strStatus = Constants.STATUS_IN_PROGRESS;
-					break;
-				case 2:
-					strStatus = Constants.STATUS_COMPLETED;
-					break;
-				default:
-					strStatus = "NA";
+					case 0:
+						strStatus = Constants.STATUS_ENROLLED;
+						break;
+					case 1:
+						strStatus = Constants.STATUS_IN_PROGRESS;
+						break;
+					case 2:
+						strStatus = Constants.STATUS_COMPLETED;
+						break;
+					default:
+						strStatus = "NA";
 				}
 				enrolmentReport.put(Constants.STATUS, strStatus);
 
@@ -1464,8 +1471,7 @@ public class ProfileServiceImpl implements ProfileService {
 				String strRole = (String) role.get(Constants.ROLE);
 				if (StringUtils.isNotBlank(strRoles)) {
 					strRoles = strRoles.concat(", ").concat(strRole);
-				}
-				else {
+				} else {
 					strRoles = StringUtils.isBlank(strRole) ? "" : strRole;
 				}
 			}
@@ -1528,14 +1534,14 @@ public class ProfileServiceImpl implements ProfileService {
 			String objectType) {
 		List<String> fields = ListUtils.EMPTY_LIST;
 		switch (objectType) {
-		case Constants.USER_CONST: {
-			fields = Constants.USER_ENROLMENT_REPORT_FIELDS;
-			break;
-		}
-		case Constants.COURSE: {
-			fields = Constants.COURSE_ENROLMENT_REPORT_FIELDS;
-			break;
-		}
+			case Constants.USER_CONST: {
+				fields = Constants.USER_ENROLMENT_REPORT_FIELDS;
+				break;
+			}
+			case Constants.COURSE: {
+				fields = Constants.COURSE_ENROLMENT_REPORT_FIELDS;
+				break;
+			}
 		}
 		for (String field : fields) {
 			if (objectInfo.containsKey(field)) {
@@ -1565,10 +1571,10 @@ public class ProfileServiceImpl implements ProfileService {
 		} finally {
 			try {
 				File file = new File(Constants.LOCAL_BASE_PATH + fileName);
-				if(file.exists()) {
+				if (file.exists()) {
 					file.delete();
 				}
-			} catch(Exception e1) {
+			} catch (Exception e1) {
 			}
 		}
 	}

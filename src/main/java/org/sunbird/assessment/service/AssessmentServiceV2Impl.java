@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.net.SyslogAppender;
+import org.apache.logging.log4j.core.layout.SyslogLayout;
 import org.joda.time.DateTime;
 import org.mortbay.util.ajax.JSON;
 import org.slf4j.Logger;
@@ -83,6 +84,8 @@ public class AssessmentServiceV2Impl implements AssessmentServiceV2 {
                                 assessmentStartTime, 0);
                         logger.info("Assessment read first time for user.");
                         Map<String, Object> assessmentData = readAssessmentLevelData(assessmentAllDetail);
+                        System.out.println("read assessment level data");
+                        System.out.println(assessmentData);
                         assessmentData.put(Constants.START_TIME, assessmentStartTime.getTime());
                         assessmentData.put(Constants.END_TIME, assessmentEndTime.getTime());
                         response.getResult().put(Constants.QUESTION_SET, assessmentData);
@@ -284,7 +287,10 @@ public class AssessmentServiceV2Impl implements AssessmentServiceV2 {
     private Map<String, String> validateQuestionListAPI(Map<String, Object> requestBody, String authUserToken,
             List<String> identifierList) throws IOException {
         Map<String, String> result = new HashMap<>();
+        System.out.println("came inside validatequestion API");
         String userId = validateAuthTokenAndFetchUserId(authUserToken);
+        System.out.println("usrid insiede validate");
+        System.out.println(userId);
         if (StringUtils.isBlank(userId)) {
             result.put(Constants.ERROR_MESSAGE, Constants.USER_ID_DOESNT_EXIST);
             return result;
@@ -301,6 +307,8 @@ public class AssessmentServiceV2Impl implements AssessmentServiceV2 {
         }
         Map<String, Object> assessmentAllDetail = new HashMap<>();
         String errMsg = fetchReadHierarchyDetails(assessmentAllDetail, authUserToken, assessmentIdFromRequest);
+        System.out.println("hierarchy details");
+        System.out.println(errMsg);
         Map<String, Object> userAssessmentAllDetail;
         if (errMsg.isEmpty()) {
             userAssessmentAllDetail = new HashMap<>();
@@ -311,10 +319,14 @@ public class AssessmentServiceV2Impl implements AssessmentServiceV2 {
                         .putAll(mapper.readValue(userQuestionSet, new TypeReference<Map<String, Object>>() {
                         }));
             } else if (ObjectUtils.isEmpty(userQuestionSet)) {
+                System.out.println("user question set");
+                System.out.println(userQuestionSet);
                 if (!((String) assessmentAllDetail.get(Constants.PRIMARY_CATEGORY))
                         .equalsIgnoreCase(Constants.PRACTICE_QUESTION_SET)) {
                     List<Map<String, Object>> existingDataList = assessmentRepository
                             .fetchUserAssessmentDataFromDB(userId, assessmentIdFromRequest);
+                    System.out.println("fetch user data from db");
+                    System.out.println(existingDataList);
                     String questionSetFromAssessmentString = (!existingDataList.isEmpty())
                             ? (String) existingDataList.get(0).get(Constants.ASSESSMENT_READ_RESPONSE)
                             : "";
