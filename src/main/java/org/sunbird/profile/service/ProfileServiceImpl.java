@@ -1144,6 +1144,8 @@ public class ProfileServiceImpl implements ProfileService {
 		SearchResponse searchResponse = indexerService.getEsResult(serverConfig.getSbEsUserProfileIndex(),
 				serverConfig.getEsProfileIndexType(), sourceBuilder, true);
 		System.out.println("source builder" + sourceBuilder);
+		System.out.println("search response" + searchResponse);
+
 		for (SearchHit hit : searchResponse.getHits()) {
 			result = hit.getSourceAsMap();
 			resultArray.add(result);

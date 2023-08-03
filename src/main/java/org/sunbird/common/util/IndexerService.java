@@ -119,10 +119,12 @@ public class IndexerService {
 	public SearchResponse getEsResult(String indexName, String type, SearchSourceBuilder searchSourceBuilder,
 			boolean isSunbirdES) throws IOException {
 		SearchRequest searchRequest = new SearchRequest();
+		System.out.println("came inside search result");
 		searchRequest.indices(indexName);
 		if (!StringUtils.isEmpty(type))
 			searchRequest.types(type);
 		searchRequest.source(searchSourceBuilder);
+		System.out.println("getEsresult" + getEsResult(searchRequest, isSunbirdES));
 		return getEsResult(searchRequest, isSunbirdES);
 	}
 
