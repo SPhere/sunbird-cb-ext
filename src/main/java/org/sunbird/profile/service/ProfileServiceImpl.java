@@ -1140,9 +1140,10 @@ public class ProfileServiceImpl implements ProfileService {
 		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder().query(finalQuery);
 		sourceBuilder.fetchSource(serverConfig.getEsAutoCompleteIncludeFields(), new String[] {});
 		System.out.println("indexname" + serverConfig.getSbEsUserProfileIndex());
-
+		System.out.println("final query" + finalQuery);
 		SearchResponse searchResponse = indexerService.getEsResult(serverConfig.getSbEsUserProfileIndex(),
 				serverConfig.getEsProfileIndexType(), sourceBuilder, true);
+		System.out.println("source builder" + sourceBuilder);
 		for (SearchHit hit : searchResponse.getHits()) {
 			result = hit.getSourceAsMap();
 			resultArray.add(result);
