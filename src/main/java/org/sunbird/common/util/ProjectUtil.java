@@ -1,7 +1,9 @@
 package org.sunbird.common.util;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -79,6 +81,11 @@ public class ProjectUtil {
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put(Constants.CONTENT_TYPE, Constants.APPLICATION_JSON);
 		return headers;
+	}
+
+	public static Timestamp getTimestampFromUUID(UUID timeStampUUID) {
+		Long timeStamp = (timeStampUUID.timestamp() - Constants.NUM_100NS_INTERVALS_SINCE_UUID_EPOCH) / 10000L;
+		return new Timestamp(timeStamp);
 	}
 
 	public enum Method {
