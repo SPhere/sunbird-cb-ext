@@ -30,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class CompetencyPassbookParser implements PassbookParser {
 
 	private Logger logger = LoggerFactory.getLogger(CompetencyPassbookParser.class);
-	
+
 	@Autowired
 	CbExtServerProperties serverProperties;
 
@@ -48,6 +48,7 @@ public class CompetencyPassbookParser implements PassbookParser {
 		// Parse the read values from DB and add it into response.result object
 		for (Map<String, Object> competencyObj : passbookList) {
 			String userId = (String) competencyObj.get(Constants.USER_ID);
+			System.out.println("userid"+userId);
 			CompetencyPassbookInfo competencyPassbookInfo = null;
 			if (competencyMap.containsKey(userId)) {
 				competencyPassbookInfo = competencyMap.get(userId);
@@ -56,6 +57,7 @@ public class CompetencyPassbookParser implements PassbookParser {
 				competencyMap.put(userId, competencyPassbookInfo);
 			}
 			String competencyId = (String) competencyObj.get(Constants.TYPE_ID);
+			System.out.println("competencyId 3" + competencyId)
 			CompetencyInfo competencyInfo = competencyPassbookInfo.getCompetencies().get(competencyId);
 			if (competencyInfo == null) {
 				competencyInfo = new CompetencyInfo(competencyId);
@@ -68,9 +70,12 @@ public class CompetencyPassbookParser implements PassbookParser {
 			acquiredDetail.put(Constants.ACQUIRED_CHANNEL, (String) competencyObj.get(Constants.ACQUIRED_CHANNEL));
 			acquiredDetail.put(Constants.COMPETENCY_LEVEL_ID, (String) competencyObj.get(Constants.CONTEXT_ID));
 			acquiredDetail.put(Constants.EFFECTIVE_DATE, competencyObj.get(Constants.EFFECTIVE_DATE));
-			acquiredDetail.put(Constants.ADDITIONAL_PARAM,(Map<String, Object>) competencyObj.get(Constants.ACQUIRED_DETAILS));
-			Map<String, Object> acquiredDetailAdditionalParam = (Map<String, Object>) competencyObj.get(Constants.ACQUIRED_DETAILS);
-
+			acquiredDetail.put(Constants.ADDITIONAL_PARAM,
+					(Map<String, Object>) competencyObj.get(Constants.ACQUIRED_DETAILS));
+					System.out.println("acquired detail 1"+acquiredDetail)
+			Map<String, Object> acquiredDetailAdditionalParam = (Map<String, Object>) competencyObj
+					.get(Constants.ACQUIRED_DETAILS);
+			System.out.println("acquiredDetailAdditionalParam 2" + acquiredDetailAdditionalParam);
 			Iterator<Entry<String, Object>> iterator = acquiredDetailAdditionalParam.entrySet().iterator();
 			while (iterator.hasNext()) {
 				Entry<String, Object> entry = iterator.next();
