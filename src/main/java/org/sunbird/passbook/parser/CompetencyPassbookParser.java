@@ -43,7 +43,7 @@ public class CompetencyPassbookParser implements PassbookParser {
 			response.getResult().put(Constants.CONTENT, CollectionUtils.EMPTY_COLLECTION);
 			return;
 		}
-
+		System.out.println("passbookList" + passbookList);
 		Map<String, CompetencyPassbookInfo> competencyMap = new HashMap<String, CompetencyPassbookInfo>();
 		// Parse the read values from DB and add it into response.result object
 		for (Map<String, Object> competencyObj : passbookList) {

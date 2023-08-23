@@ -105,7 +105,10 @@ public class PassbookServiceImpl implements PassbookService {
 
 		try {
 			Map<String, Object> requestBody = (Map<String, Object>) request.get(Constants.REQUEST);
+			System.out.println("requestBody" + requestBody);
 			String typeName = (String) requestBody.get(Constants.TYPE_NAME);
+			System.out.println("typeName" + typeName);
+
 			Map<String, Object> propertyMap = new HashMap<>();
 			List<String> userIdList = null;
 			if (isAdminApi) {
@@ -115,9 +118,15 @@ public class PassbookServiceImpl implements PassbookService {
 			}
 
 			propertyMap.put(Constants.USER_ID, userIdList);
+			System.out.println("userIdList" + userIdList);
+
 			propertyMap.put(Constants.TYPE_NAME, typeName);
+			System.out.println("typeName" + typeName);
+
 			List<Map<String, Object>> passbookList = cassandraOperation.getRecordsByProperties(Constants.DATABASE,
 					Constants.USER_PASSBOOK_TABLE, propertyMap, null);
+			System.out.println("passbookList" + passbookList);
+
 			PassbookParser parser = getPassbookParser(typeName);
 			parser.parseDBInfo(passbookList, response);
 		} catch (Exception e) {
@@ -211,7 +220,7 @@ public class PassbookServiceImpl implements PassbookService {
 	private PassbookParser getPassbookParser(String typeName) {
 		return parserHanlder.getPassbookParser(typeName);
 	}
-	
+
 	public SBApiResponse migrateData() {
 		List<Map<String, Object>> passbookList = cassandraOperation.getRecordsByProperties(Constants.DATABASE,
 				Constants.USER_PASSBOOK_TABLE_OLD, null, null);
