@@ -665,6 +665,28 @@ public class Constants {
 	public static final String FAILED_RECORDS_COUNT = "failedRecordsCount";
 	public static final String API_FILE_DOWNLOAD = "api.file.download";
 
+	public static final String PASSBOOK_READ_API = "user.passbook.read";
+	public static final String PASSBOOK_ADMIN_READ_API = "user.passbook.admin.read";
+	public static final String PASSBOOK_ADD_API = "user.passbook.add";
+	public static final String USER_PASSBOOK_TABLE = "user_passbook_v2";
+	public static final String TYPE_NAME = "typeName";
+	public static final String TYPE_ID = "typeId";
+	public static final String ADDITIONAL_PARAM = "additionalParams";
+	public static final String ACQUIRED_CHANNEL = "acquiredChannel";
+	public static final String CONTEXT_ID = "contextId";
+	public static final String EFFECTIVE_DATE = "effectiveDate";
+	public static final String COMPETENCY_LEVEL_ID = "competencyLevelId";
+	public static final String ACQUIRED_DETAILS = "acquiredDetails";
+	public static final String COMPETENCY_DETAILS = "competencyDetails";
+	public static final String COMPETENCY_ID = "competencyId";
+	public static final long NUM_100NS_INTERVALS_SINCE_UUID_EPOCH = 0x01b21dd213814000L;
+	public static final String USER_PASSBOOK_TABLE_OLD = "user_passbook";
+	public static final String PASSBOOK_MIGRATE_API = "user.passbook.migrate";
+	public static final String BATCH_ID_ = "batchid";
+	public static final String COURSE_ID_ = "courseid";
+	public static final String COMPLETION_PERCENTAGE_ = "completionpercentage";
+	public static final String OVERVIEW_BATCH_ID = "overview.batch";
+
 	private Constants() {
 		throw new IllegalStateException("Utility class");
 	}

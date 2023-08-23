@@ -1593,4 +1593,12 @@ public class CbExtServerProperties {
 	public void setUserBulkUploadTopic(String userBulkUploadTopic) {
 		this.userBulkUploadTopic = userBulkUploadTopic;
 	}
+
+	public List<String> getUserPassbookSupportedTypeName() {
+		return Arrays.asList(userPassbookSupportedTypeName.split(",", -1));
+	}
+
+	public void setUserPassbookSupportedTypeName(String userPassbookSupportedTypeName) {
+		this.userPassbookSupportedTypeName = userPassbookSupportedTypeName;
+	}
 }
