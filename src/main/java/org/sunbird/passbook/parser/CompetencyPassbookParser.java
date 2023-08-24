@@ -169,6 +169,7 @@ public class CompetencyPassbookParser implements PassbookParser {
 		competency.put(Constants.USER_ID, compUserId);
 		competency.put(Constants.TYPE_ID, competencyId);
 		competency.put(Constants.TYPE_NAME, Constants.COMPETENCY);
+		System.out.println("competency inside check" + competency);
 
 		Map<String, Object> acquiredDetailsMap = (Map<String, Object>) competencyRequest
 				.get(Constants.ACQUIRED_DETAILS);
@@ -200,6 +201,8 @@ public class CompetencyPassbookParser implements PassbookParser {
 						}
 					}
 				}
+				System.out.println("competency inside check 2" + competency);
+
 				acquiredDetails.put(Constants.CREATED_BY, requestedUserId);
 				acquiredDetails.put(Constants.CREATED_DATE, DateTime.now().toString());
 				competency.put(Constants.ACQUIRED_DETAILS, acquiredDetails);
@@ -224,6 +227,8 @@ public class CompetencyPassbookParser implements PassbookParser {
 					logger.error(String.format("Failed to parse date: %s, Exception: ", strEffectiveDate), e);
 				}
 			}
+			System.out.println("competency inside check 3" + competency);
+
 		}
 
 		Map<String, String> additionalParams = (Map<String, String>) competencyRequest.get(Constants.ADDITIONAL_PARAM);
