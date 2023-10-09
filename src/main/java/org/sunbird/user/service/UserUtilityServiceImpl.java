@@ -236,7 +236,7 @@ public class UserUtilityServiceImpl implements UserUtilityService {
 						StringUtils.EMPTY);
 				if (!CollectionUtils.isEmpty(userData)) {
 					userRegistration.setUserName((String) userData.get(Constants.USER_NAME));
-					userRegistration.setSbOrgId((String) userData.get(Constants.ROOT_ORG_ID) );
+					userRegistration.setSbOrgId((String) userData.get(Constants.ROOT_ORG_ID));
 					retValue = updateUser(userRegistration);
 				}
 			}
@@ -372,7 +372,8 @@ public class UserUtilityServiceImpl implements UserUtilityService {
 		if (Constants.OK.equalsIgnoreCase((String) readData.get(Constants.RESPONSE_CODE))) {
 			retValue = true;
 		}
-		printMethodExecutionResult("SendWelcomeEmail", userRegistration.toMininumString(), retValue);
+		// printMethodExecutionResult("SendWelcomeEmail",
+		// userRegistration.toMininumString(), retValue);
 		return retValue;
 	}
 
@@ -545,11 +546,9 @@ public class UserUtilityServiceImpl implements UserUtilityService {
 		return true;
 	}
 
-
 	@Override
 	public Boolean isDomainAccepted(String email) {
 		String emailDomain = email.split("@")[1];
 		return props.getUserRegistrationDomain().contains(emailDomain);
 	}
 }
-
