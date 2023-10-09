@@ -143,9 +143,9 @@ public class UserBulkUploadService {
                         errorDetails = nextRow.createCell(5);
                     }
                     totalRecordsCount++;
+                    System.out.println(errList);
                     if (errList.isEmpty()) {
                         System.out.println(" Inside error list");
-
                         boolean isUserCreated = userUtilityService.createUser(userRegistration);
                         System.out.println(" isusercreated");
                         System.out.println(isUserCreated);

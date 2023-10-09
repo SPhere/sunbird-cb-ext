@@ -227,6 +227,7 @@ public class UserUtilityServiceImpl implements UserUtilityService {
 		requestBody.put(Constants.PHONE_VERIFIED, true);
 		request.put(Constants.REQUEST, requestBody);
 		try {
+			System.out.println("Inside create account");
 			Map<String, Object> readData = (Map<String, Object>) outboundRequestHandlerService.fetchResultUsingPost(
 					props.getSbUrl() + props.getLmsUserCreatePath(), request, ProjectUtil.getDefaultHeaders());
 			if (Constants.OK.equalsIgnoreCase((String) readData.get(Constants.RESPONSE_CODE))) {
@@ -237,6 +238,8 @@ public class UserUtilityServiceImpl implements UserUtilityService {
 				if (!CollectionUtils.isEmpty(userData)) {
 					userRegistration.setUserName((String) userData.get(Constants.USER_NAME));
 					userRegistration.setSbOrgId((String) userData.get(Constants.ROOT_ORG_ID));
+					System.out.println("user registration inside");
+					System.out.println(userRegistration);
 					retValue = updateUser(userRegistration);
 				}
 			}
@@ -251,6 +254,7 @@ public class UserUtilityServiceImpl implements UserUtilityService {
 	@Override
 	public boolean updateUser(UserRegistration userRegistration) {
 		boolean retValue = false;
+		System.out.println("Inside update user");
 		Map<String, Object> request = new HashMap<>();
 		Map<String, Object> requestBody = new HashMap<String, Object>();
 		requestBody.put(Constants.USER_ID, userRegistration.getUserId());
@@ -282,6 +286,8 @@ public class UserUtilityServiceImpl implements UserUtilityService {
 		if (Constants.OK.equalsIgnoreCase((String) readData.get(Constants.RESPONSE_CODE))) {
 			retValue = assignRole(userRegistration.getSbOrgId(), userRegistration.getUserId(),
 					userRegistration.toMininumString());
+			System.out.println("Inside update for role assign");
+			System.out.println(retValue);
 			if (retValue) {
 				retValue = createNodeBBUser(userRegistration);
 			}
@@ -291,6 +297,7 @@ public class UserUtilityServiceImpl implements UserUtilityService {
 	}
 
 	public boolean assignRole(String sbOrgId, String userId, String objectDetails) {
+		System.out.println("Isnside assign role");
 		boolean retValue = false;
 		Map<String, Object> request = new HashMap<>();
 		Map<String, Object> requestBody = new HashMap<String, Object>();
