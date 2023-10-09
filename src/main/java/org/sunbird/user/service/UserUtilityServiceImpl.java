@@ -322,7 +322,7 @@ public class UserUtilityServiceImpl implements UserUtilityService {
 				props.getDiscussionHubHost() + props.getDiscussionHubCreateUserPath(), request,
 				ProjectUtil.getDefaultHeaders());
 		if (Constants.OK.equalsIgnoreCase((String) readData.get(Constants.RESPONSE_CODE))) {
-			retValue = getActivationLink(userRegistration);
+			// retValue = getActivationLink(userRegistration);
 		}
 		printMethodExecutionResult("Create NodeBB User", userRegistration.toMininumString(), retValue);
 		return retValue;
@@ -372,8 +372,8 @@ public class UserUtilityServiceImpl implements UserUtilityService {
 		if (Constants.OK.equalsIgnoreCase((String) readData.get(Constants.RESPONSE_CODE))) {
 			retValue = true;
 		}
-		// printMethodExecutionResult("SendWelcomeEmail",
-		// userRegistration.toMininumString(), retValue);
+		printMethodExecutionResult("SendWelcomeEmail",
+				userRegistration.toMininumString(), retValue);
 		return retValue;
 	}
 
