@@ -289,7 +289,8 @@ public class UserUtilityServiceImpl implements UserUtilityService {
 			System.out.println("Inside update for role assign");
 			System.out.println(retValue);
 			if (retValue) {
-				retValue = createNodeBBUser(userRegistration);
+				// retValue = createNodeBBUser(userRegistration);
+				System.out.print("Inside ret value");
 			}
 		}
 		printMethodExecutionResult("UpdateUser", userRegistration.toMininumString(), retValue);
