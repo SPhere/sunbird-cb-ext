@@ -30,6 +30,13 @@ public interface ContentService {
 	public String getParentIdentifier(String resourceId);
 
 	public String getContentType(String resourceId);
+	
+	public Map<String, Object> readContent(String contentId);
+	
+	public Map<String, Object> readContent(String contentId, List<String> fields);
+	
+	public List<Map<String, Object>> searchContent(String tag);
+
 
 	public void getLiveContentDetails(List<String> contentIdList, List<String> fields,
 			Map<String, Map<String, String>> contentInfoMap);

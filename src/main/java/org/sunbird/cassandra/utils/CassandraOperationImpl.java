@@ -334,4 +334,110 @@ public class CassandraOperationImpl implements CassandraOperation {
 		}
 		return response;
 	}
+	/**
+	 * Fetch records with specified columns (select all if null) for given column
+	 * map (name, value pairs).
+	 *
+	 * @param keyspaceName Keyspace name
+	 * @param tableName    Table name
+	 * @param propertyMap  Map describing columns to be used in where clause of
+	 *                     select query.
+	 * @param fields       List of columns to be returned in each record
+	 * @return List consisting of fetched records
+	 */
+	public List<Map<String, Object>> getRecordsByPropertiesWithoutFiltering(String keyspaceName, String tableName,
+			Map<String, Object> propertyMap, List<String> fields) {
+		return getRecordsByPropertiesWithoutFiltering(keyspaceName, tableName, propertyMap, fields, null);
+	}
+
+	@Override
+	public List<Map<String, Object>> getRecordsByPropertiesWithoutFiltering(String keyspaceName, String tableName,
+			Map<String, Object> propertyMap, List<String> fields, Integer limit) {
+		Select selectQuery = null;
+		List<Map<String, Object>> response = new ArrayList<>();
+		try {
+			selectQuery = processQueryWithoutFiltering(keyspaceName, tableName, propertyMap, fields);
+			if (limit != null) {
+				selectQuery = selectQuery.limit(limit);
+			}
+			ResultSet results = connectionManager.getSession(keyspaceName).execute(selectQuery);
+			response = CassandraUtil.createResponse(results);
+
+		} catch (Exception e) {
+			logger.error(Constants.EXCEPTION_MSG_FETCH + tableName + " : " + e.getMessage(), e);
+		}
+		return response;
+	}
+
+	private Select processQueryWithoutFiltering(String keyspaceName, String tableName, Map<String, Object> propertyMap,
+			List<String> fields) {
+		Select selectQuery = null;
+		Builder selectBuilder;
+		if (CollectionUtils.isNotEmpty(fields)) {
+			String[] dbFields = fields.toArray(new String[fields.size()]);
+			selectBuilder = QueryBuilder.select(dbFields);
+		} else {
+			selectBuilder = QueryBuilder.select().all();
+		}
+		selectQuery = selectBuilder.from(keyspaceName, tableName);
+		if (MapUtils.isNotEmpty(propertyMap)) {
+			Where selectWhere = selectQuery.where();
+			for (Entry<String, Object> entry : propertyMap.entrySet()) {
+				if (entry.getValue() instanceof List) {
+					List<Object> list = (List) entry.getValue();
+					if (null != list) {
+						Object[] propertyValues = list.toArray(new Object[list.size()]);
+						Clause clause = QueryBuilder.in(entry.getKey(), propertyValues);
+						selectWhere.and(clause);
+					}
+				} else {
+					Clause clause = QueryBuilder.eq(entry.getKey(), entry.getValue());
+					selectWhere.and(clause);
+				}
+			}
+		}
+		return selectQuery;
+	}
+
+	public Map<String, Object> getRecordsByPropertiesByKey(String keyspaceName, String tableName,
+			Map<String, Object> propertyMap, List<String> fields, String key) {
+		Select selectQuery = null;
+		Map<String, Object> response = new HashMap<>();
+		try {
+			selectQuery = processQueryWithoutFiltering(keyspaceName, tableName, propertyMap, fields);
+			ResultSet results = connectionManager.getSession(keyspaceName).execute(selectQuery);
+			response = CassandraUtil.createResponse(results, key);
+		} catch (Exception e) {
+			logger.error(Constants.EXCEPTION_MSG_FETCH + tableName + " : " + e.getMessage(), e);
+		}
+		return response;
+	}
+
+	@Override
+	public List<Map<String, Object>> getKarmaPointsRecordsByPropertiesWithPaginationList(String keyspaceName, String tableName,
+																						 Map<String, Object> propertyMap, List<String> fields, int limit, Date updatedOn, String key) {
+		Select selectQuery = null;
+		List<Map<String, Object>> response = new ArrayList<>();
+		try {
+			selectQuery = processQueryWithoutFiltering(keyspaceName, tableName, propertyMap, fields);
+			selectQuery.limit(limit);
+			selectQuery.where(QueryBuilder.lt(Constants.DB_COLUMN_CREDIT_DATE, updatedOn));
+			ResultSet results = connectionManager.getSession(keyspaceName).execute(selectQuery);
+			response = CassandraUtil.createResponse(results);
+		} catch (Exception e) {
+			logger.error(Constants.EXCEPTION_MSG_FETCH + tableName + " : " + e.getMessage(), e);
+		}
+		return response;
+	}
+	public Long getRecordCountWithUserId(String keyspace, String tableName, String userId) {
+		try {
+			Where selectQuery = QueryBuilder.select().countAll().from(keyspace, tableName)
+					.where(QueryBuilder.eq(Constants.USER_ID, userId));
+			Row row = connectionManager.getSession(keyspace).execute(selectQuery).one();
+			return row.getLong(0);
+		} catch (Exception e) {
+			logger.error(Constants.EXCEPTION_MSG_FETCH + tableName + " : " + e.getMessage(), e);
+			throw e;
+		}
+	}
 }

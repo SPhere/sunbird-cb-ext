@@ -1,5 +1,9 @@
 package org.sunbird.ratings.controller;
 
+import java.util.Map;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,8 +11,6 @@ import org.sunbird.common.model.SBApiResponse;
 import org.sunbird.ratings.model.LookupRequest;
 import org.sunbird.ratings.model.RequestRating;
 import org.sunbird.ratings.service.RatingService;
-
-import javax.validation.Valid;
 
 @RestController
 public class RatingsController {
@@ -22,7 +24,6 @@ public class RatingsController {
     public ResponseEntity<?> upsertRating(@Valid @RequestBody RequestRating requestRatingBody) {
         SBApiResponse response = ratingService.upsertRating(requestRatingBody);
         return new ResponseEntity<>(response, response.getResponseCode());
-
     }
 
     @GetMapping("/ratings/v1/read/{activityId}/{activityType}/{userId}")
@@ -31,7 +32,6 @@ public class RatingsController {
                                        @PathVariable("userId") String userId) {
         SBApiResponse response = ratingService.getRatings(activityId, activityType, userId);
         return new ResponseEntity<>(response, response.getResponseCode());
-
     }
 
     @GetMapping("/ratings/v1/summary/{activityId}/{activityType}")
@@ -44,6 +44,24 @@ public class RatingsController {
     @PostMapping("/ratings/v1/ratingLookUp")
     public ResponseEntity<?> ratingLookUp(@RequestBody LookupRequest request) {
         SBApiResponse response = ratingService.ratingLookUp(request);
+        return new ResponseEntity<>(response, response.getResponseCode());
+    }
+
+    @PostMapping("/ratings/v2/read")
+    public ResponseEntity<?> readRating(@RequestBody Map<String, Object> request) {
+        SBApiResponse response = ratingService.readRatings(request);
+        return new ResponseEntity<>(response, response.getResponseCode());
+    }
+
+    @PostMapping("/ratings/meta/update")
+    public ResponseEntity<?> updateRatingsMetaData() {
+        SBApiResponse response = ratingService.updateRatingsMetaData();
+        return new ResponseEntity<>(response, response.getResponseCode());
+    }
+
+    @PostMapping("/update/v1/content/additionaltag")
+    public ResponseEntity<?> updateAdditionalTag(@RequestParam("tag") String tag) {
+        SBApiResponse response = ratingService.updateAdditionalTag(tag);
         return new ResponseEntity<>(response, response.getResponseCode());
     }
 }

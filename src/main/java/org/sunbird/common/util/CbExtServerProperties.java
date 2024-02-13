@@ -446,6 +446,73 @@ public class CbExtServerProperties {
 	private String[] ContextTypes;
 	@Value("${kafka.topics.user.bulk.upload}")
 	private String userBulkUploadTopic;
+	
+	
+	@Value("${learning_service_base_url}")
+	private String learningServiceBaseUrl;
+	
+	@Value("${system.content.update.url}")
+	private String systemUpdateAPI;
+	
+	@Value("${redis.insights.index}")
+	private int redisInsightIndex;
+	
+	@Value("${content-read-endpoint}")
+	private String contentReadEndPoint;
+	
+	@Value("${content-read-endpoint-fields}")
+	private String contentReadEndPointFields;
+	
+	@Value(("${limit_for_search}"))
+	private String limitForSearch;
+
+	public String getLimitForSearch() {
+		return limitForSearch;
+	}
+
+	public void setLimitForSearch(String limitForSearch) {
+		this.limitForSearch = limitForSearch;
+	}
+
+	public String getContentReadEndPointFields() {
+		return contentReadEndPointFields;
+	}
+
+	public void setContentReadEndPointFields(String contentReadEndPointFields) {
+		this.contentReadEndPointFields = contentReadEndPointFields;
+	}
+
+	public String getContentReadEndPoint() {
+		return contentReadEndPoint;
+	}
+
+	public void setContentReadEndPoint(String contentReadEndPoint) {
+		this.contentReadEndPoint = contentReadEndPoint;
+	}
+
+	public int getRedisInsightIndex() {
+		return redisInsightIndex;
+	}
+
+	public void setRedisInsightIndex(int redisInsightIndex) {
+		this.redisInsightIndex = redisInsightIndex;
+	}
+
+	public String getSystemUpdateAPI() {
+		return systemUpdateAPI;
+	}
+
+	public void setSystemUpdateAPI(String systemUpdateAPI) {
+		this.systemUpdateAPI = systemUpdateAPI;
+	}
+
+	public String getLearningServiceBaseUrl() {
+		return learningServiceBaseUrl;
+	}
+
+	public void setLearningServiceBaseUrl(String learningServiceBaseUrl) {
+		this.learningServiceBaseUrl = learningServiceBaseUrl;
+	}
 
 	public String getAssessmentSubmitTopic() {
 		return assessmentSubmitTopic;
