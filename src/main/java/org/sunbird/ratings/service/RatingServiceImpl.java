@@ -1,5 +1,6 @@
 package org.sunbird.ratings.service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
@@ -41,6 +42,7 @@ import org.sunbird.ratings.responsecode.ResponseCode;
 import org.sunbird.ratings.responsecode.ResponseMessage;
 
 import com.datastax.driver.core.utils.UUIDs;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -133,13 +135,18 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public SBApiResponse getRatingSummary(String activityId, String activityType) {
         SBApiResponse response = new SBApiResponse(Constants.API_RATINGS_SUMMARY);
-        try {
+//        try {
             validationBody = new ValidationBody();
             validationBody.setActivityId(activityId);
             validationBody.setActivityType(activityType);
             List<SummaryModel.latestReviews> latest50Reviews = new ArrayList<>();
-            validateRatingsInfo(validationBody, "getSummary");
-
+            try {
+				validateRatingsInfo(validationBody, "getSummary");
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+            System.out.println("rating summary validation done ");
             Map<String, Object> request = new HashMap<>();
             request.put(Constants.ACTIVITY_ID, activityId);
             request.put(Constants.ACTIVITY_TYPE, activityType);
@@ -148,11 +155,18 @@ public class RatingServiceImpl implements RatingService {
                     Constants.KEYSPACE_SUNBIRD,
                     Constants.TABLE_RATINGS_SUMMARY, request, null);
 
+            System.out.println("rating summary existingDataList : "+existingDataList);
             if (!CollectionUtils.isEmpty(existingDataList)) {
                 Map<String, Object> summaryData = existingDataList.get(0);
                 if(summaryData.get(Constants.LATEST50REVIEWS)!=null) {
                     String reviews = (String) summaryData.get(Constants.LATEST50REVIEWS);
-                    JsonNode actualObj = mapper.readTree(reviews);
+                    JsonNode actualObj = null;
+					try {
+						actualObj = mapper.readTree(reviews);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
                     List<String> userList = new ArrayList<>();
                     Map<String, SummaryNodeModel> reviewMap = new HashMap<>();
@@ -172,6 +186,8 @@ public class RatingServiceImpl implements RatingService {
                     Map<String, Object> existingUserList = cassandraOperation.getRecordsByProperties(Constants.KEYSPACE_SUNBIRD,
                             Constants.TABLE_USER, userRequest, fields, Constants.ID);
 
+                    System.out.println("rating summary existingUserList : "+existingDataList);
+                    
                     for (String user : userList) {
                         final ObjectMapper mapper = new ObjectMapper();
                         final UserModel userModel = mapper.convertValue(existingUserList.get(user), UserModel.class);
@@ -187,18 +203,25 @@ public class RatingServiceImpl implements RatingService {
                         ));
                     }
                 }
-                SummaryModel summaryModel = new SummaryModel(
-                        summaryData.get(Constants.ACTIVITY_ID).toString(),
-                        summaryData.get(Constants.ACTIVITY_TYPE).toString(),
-                        (Float) summaryData.get(Constants.TOTALCOUNT1STARS),
-                        (Float) summaryData.get(Constants.TOTALCOUNT2STARS),
-                        (Float) summaryData.get(Constants.TOTALCOUNT3STARS),
-                        (Float) summaryData.get(Constants.TOTALCOUNT4STARS),
-                        (Float) summaryData.get(Constants.TOTALCOUNT5STARS),
-                        (Float) summaryData.get(Constants.TOTALNUMBEROFRATINGS),
-                        (Float) summaryData.get(Constants.SUMOFTOTALRATINGS),
-                        (summaryData.get(Constants.LATEST50REVIEWS)!=null) ? mapper.writeValueAsString(latest50Reviews) :null
-                );
+                System.out.println("summaryData result : "+summaryData);
+                SummaryModel summaryModel = null;
+				try {
+					summaryModel = new SummaryModel(
+					        summaryData.get(Constants.ACTIVITY_ID).toString(),
+					        summaryData.get(Constants.ACTIVITY_TYPE).toString(),
+					        (Float) summaryData.get(Constants.TOTALCOUNT1STARS),
+					        (Float) summaryData.get(Constants.TOTALCOUNT2STARS),
+					        (Float) summaryData.get(Constants.TOTALCOUNT3STARS),
+					        (Float) summaryData.get(Constants.TOTALCOUNT4STARS),
+					        (Float) summaryData.get(Constants.TOTALCOUNT5STARS),
+					        (Float) summaryData.get(Constants.TOTALNUMBEROFRATINGS),
+					        (Float) summaryData.get(Constants.SUMOFTOTALRATINGS),
+					        (summaryData.get(Constants.LATEST50REVIEWS)!=null) ? mapper.writeValueAsString(latest50Reviews) :null
+					);
+				} catch (JsonProcessingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 response.put(Constants.MESSAGE, Constants.SUCCESSFUL);
                 response.put(Constants.RESPONSE, summaryModel);
                 response.setResponseCode(HttpStatus.OK);
@@ -207,10 +230,10 @@ public class RatingServiceImpl implements RatingService {
                 response.put(Constants.RESPONSE, null);
                 response.setResponseCode(HttpStatus.OK);
             }
-        } catch (Exception e) {
-            logger.error(e);
-            processExceptionBody(response, e, "", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+//        } catch (Exception e) {
+//            logger.error(e);
+//            processExceptionBody(response, e, "", HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
         return response;
     }
 
