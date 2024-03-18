@@ -207,8 +207,8 @@ public class RatingServiceImpl implements RatingService {
                 SummaryModel summaryModel = null;
 				try {
 					summaryModel = new SummaryModel(
-					        summaryData.get(Constants.ACTIVITY_ID).toString(),
-					        summaryData.get(Constants.ACTIVITY_TYPE).toString(),
+					        summaryData.get(Constants.SUMMARY_ACTIVITY_ID).toString(),
+					        summaryData.get(Constants.SUMMARY_ACTIVITY_TYPE).toString(),
 					        (Float) summaryData.get(Constants.TOTALCOUNT1STARS),
 					        (Float) summaryData.get(Constants.TOTALCOUNT2STARS),
 					        (Float) summaryData.get(Constants.TOTALCOUNT3STARS),
